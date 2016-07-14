@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2461A7D81D36BA4A00DED48E /* Destroyer.png in Resources */ = {isa = PBXBuildFile; fileRef = 2461A7D71D36BA4A00DED48E /* Destroyer.png */; };
+		2461A7DA1D36C53D00DED48E /* ShipCell.png in Resources */ = {isa = PBXBuildFile; fileRef = 2461A7D91D36C53D00DED48E /* ShipCell.png */; };
 		247D61871D1F636800598D29 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 247D61861D1F636800598D29 /* AppDelegate.swift */; };
 		247D61891D1F636800598D29 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 247D61881D1F636800598D29 /* ViewController.swift */; };
 		247D618C1D1F636800598D29 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 247D618A1D1F636800598D29 /* Main.storyboard */; };
@@ -14,8 +16,15 @@
 		247D61911D1F636800598D29 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 247D618F1D1F636800598D29 /* LaunchScreen.storyboard */; };
 		247D619C1D1F636800598D29 /* BattleshipTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 247D619B1D1F636800598D29 /* BattleshipTests.swift */; };
 		247D61A71D1F636800598D29 /* BattleshipUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 247D61A61D1F636800598D29 /* BattleshipUITests.swift */; };
-		247D61B51D1F654600598D29 /* graph.gif in Resources */ = {isa = PBXBuildFile; fileRef = 247D61B41D1F654600598D29 /* graph.gif */; };
 		24A2F8CD1D20251F0048CF7D /* BattleshipEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24A2F8CC1D20251F0048CF7D /* BattleshipEngine.swift */; };
+		24D5E70E1D36F4800039C726 /* Battleship.png in Resources */ = {isa = PBXBuildFile; fileRef = 24D5E70A1D36F4800039C726 /* Battleship.png */; };
+		24D5E70F1D36F4800039C726 /* Carrier.png in Resources */ = {isa = PBXBuildFile; fileRef = 24D5E70B1D36F4800039C726 /* Carrier.png */; };
+		24D5E7101D36F4800039C726 /* Cruiser.png in Resources */ = {isa = PBXBuildFile; fileRef = 24D5E70C1D36F4800039C726 /* Cruiser.png */; };
+		24D5E7111D36F4800039C726 /* Submarine.png in Resources */ = {isa = PBXBuildFile; fileRef = 24D5E70D1D36F4800039C726 /* Submarine.png */; };
+		24D5E7131D36FBBF0039C726 /* WaterCellAxis.png in Resources */ = {isa = PBXBuildFile; fileRef = 24D5E7121D36FBBF0039C726 /* WaterCellAxis.png */; };
+		24D5E7151D36FBEE0039C726 /* WaterCellAxis2.png in Resources */ = {isa = PBXBuildFile; fileRef = 24D5E7141D36FBEE0039C726 /* WaterCellAxis2.png */; };
+		24E90A711D36B504001947D3 /* WaterCell.png in Resources */ = {isa = PBXBuildFile; fileRef = 24E90A701D36B504001947D3 /* WaterCell.png */; };
+		24E90A731D36B7AB001947D3 /* line.png in Resources */ = {isa = PBXBuildFile; fileRef = 24E90A721D36B7AB001947D3 /* line.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +45,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2461A7D71D36BA4A00DED48E /* Destroyer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Destroyer.png; sourceTree = SOURCE_ROOT; };
+		2461A7D91D36C53D00DED48E /* ShipCell.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ShipCell.png; sourceTree = SOURCE_ROOT; };
 		247D61831D1F636800598D29 /* Battleship.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Battleship.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		247D61861D1F636800598D29 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		247D61881D1F636800598D29 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -49,8 +60,15 @@
 		247D61A21D1F636800598D29 /* BattleshipUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BattleshipUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		247D61A61D1F636800598D29 /* BattleshipUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BattleshipUITests.swift; sourceTree = "<group>"; };
 		247D61A81D1F636800598D29 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		247D61B41D1F654600598D29 /* graph.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = graph.gif; path = ../../../Desktop/graph.gif; sourceTree = "<group>"; };
 		24A2F8CC1D20251F0048CF7D /* BattleshipEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BattleshipEngine.swift; sourceTree = "<group>"; };
+		24D5E70A1D36F4800039C726 /* Battleship.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Battleship.png; sourceTree = SOURCE_ROOT; };
+		24D5E70B1D36F4800039C726 /* Carrier.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Carrier.png; sourceTree = SOURCE_ROOT; };
+		24D5E70C1D36F4800039C726 /* Cruiser.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Cruiser.png; sourceTree = SOURCE_ROOT; };
+		24D5E70D1D36F4800039C726 /* Submarine.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Submarine.png; sourceTree = SOURCE_ROOT; };
+		24D5E7121D36FBBF0039C726 /* WaterCellAxis.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = WaterCellAxis.png; sourceTree = SOURCE_ROOT; };
+		24D5E7141D36FBEE0039C726 /* WaterCellAxis2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = WaterCellAxis2.png; sourceTree = SOURCE_ROOT; };
+		24E90A701D36B504001947D3 /* WaterCell.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = WaterCell.png; sourceTree = SOURCE_ROOT; };
+		24E90A721D36B7AB001947D3 /* line.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = line.png; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,7 +126,16 @@
 				247D618D1D1F636800598D29 /* Assets.xcassets */,
 				247D618F1D1F636800598D29 /* LaunchScreen.storyboard */,
 				247D61921D1F636800598D29 /* Info.plist */,
-				247D61B41D1F654600598D29 /* graph.gif */,
+				24E90A701D36B504001947D3 /* WaterCell.png */,
+				2461A7D91D36C53D00DED48E /* ShipCell.png */,
+				24E90A721D36B7AB001947D3 /* line.png */,
+				24D5E70A1D36F4800039C726 /* Battleship.png */,
+				24D5E70B1D36F4800039C726 /* Carrier.png */,
+				24D5E70C1D36F4800039C726 /* Cruiser.png */,
+				24D5E70D1D36F4800039C726 /* Submarine.png */,
+				2461A7D71D36BA4A00DED48E /* Destroyer.png */,
+				24D5E7121D36FBBF0039C726 /* WaterCellAxis.png */,
+				24D5E7141D36FBEE0039C726 /* WaterCellAxis2.png */,
 			);
 			path = Battleship;
 			sourceTree = "<group>";
@@ -193,6 +220,11 @@
 		247D617B1D1F636800598D29 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				KnownAssetTags = (
+					0,
+					1,
+					"1 0",
+				);
 				LastSwiftUpdateCheck = 0730;
 				LastUpgradeCheck = 0730;
 				ORGANIZATIONNAME = "Sawyer Blatz";
@@ -236,10 +268,19 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				24D5E7131D36FBBF0039C726 /* WaterCellAxis.png in Resources */,
 				247D61911D1F636800598D29 /* LaunchScreen.storyboard in Resources */,
+				24D5E7111D36F4800039C726 /* Submarine.png in Resources */,
+				24D5E7151D36FBEE0039C726 /* WaterCellAxis2.png in Resources */,
+				24D5E70F1D36F4800039C726 /* Carrier.png in Resources */,
+				24D5E70E1D36F4800039C726 /* Battleship.png in Resources */,
+				24E90A731D36B7AB001947D3 /* line.png in Resources */,
 				247D618E1D1F636800598D29 /* Assets.xcassets in Resources */,
+				24D5E7101D36F4800039C726 /* Cruiser.png in Resources */,
 				247D618C1D1F636800598D29 /* Main.storyboard in Resources */,
-				247D61B51D1F654600598D29 /* graph.gif in Resources */,
+				24E90A711D36B504001947D3 /* WaterCell.png in Resources */,
+				2461A7DA1D36C53D00DED48E /* ShipCell.png in Resources */,
+				2461A7D81D36BA4A00DED48E /* Destroyer.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

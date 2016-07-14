@@ -29,16 +29,16 @@ class BattleshipEngine {
     var currentGameState = "Setup"
 
     
-    var player1Board = [[String]]()
+    //var player1Board = [[String]]()
+    var player1Board = [[String]](count: 11, repeatedValue: [String](count: 11, repeatedValue: "W"))
+    //arr[0][1] = 1
     var player2Board = [[String]]()
     
     
     
-    
-    
     //dimensions of the sea:
-    let xLen = 20
-    let yLen = 20
+    let xLen = 10
+    let yLen = 10
     
     //players -- this means we have two boards we have to keep track of
     let player1 = 1
@@ -58,7 +58,12 @@ class BattleshipEngine {
     var Carrier2 = Ship(width: 5, rotation: 0, name: "Carrier")
     
     var shipArray = [Ship]()
+    var currentIndex = 0
     
+    
+    var currentShipBeingPlaced: Ship {
+        return shipArray[currentIndex]
+    }
     
     func setup() {
         currentPlayer = 1
@@ -74,10 +79,13 @@ class BattleshipEngine {
         shipArray.append(Carrier2)
         //ask the player to place their first ship
         print("Please place your first ship")
+        
+        //Get the current text on the "place" coordinates to determine where the ship should be placed
     }
 
     
-    //default ships:
+
+    //placeShip once we press "Confirm", then advance the currentShipBeingPlaced
     
     func placeShip(xLocation:Int, yLocation: Int, ship: Ship) {
         //place the ship's leftmost end at this location on the active player's board.
@@ -86,21 +94,33 @@ class BattleshipEngine {
         if currentPlayer == 1 {
         
         
-        for i in 0...ship.width {
-            player1Board[xLocation][yLocation] = ship.name
+        for i in 1...ship.width {
+            player1Board[yLocation][xLocation] = ship.name
             xLocation += 1
         }
             
         }
         else {
             for i in 0...ship.width {
-                player2Board[xLocation][yLocation] = ship.name
+                player2Board[yLocation][xLocation] = ship.name
                 xLocation += 1
             }
         }
-        changeCurrentPlayer()
+        
+        currentIndex += 1
+        
+        //changeCurrentPlayer()
         
         
+    }
+    
+    func printPlayer1Board() {
+        for x in 0 ..< player1Board.count {
+            for y in 0 ..< player1Board[x].count {
+                print(player1Board[x][y])
+            }
+        }
+
     }
     
     func fireAtLocation(xLocation: Int, yLocation: Int) {
