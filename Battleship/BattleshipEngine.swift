@@ -37,8 +37,8 @@ class BattleshipEngine {
     
     
     //dimensions of the sea:
-    let xLen = 10
-    let yLen = 10
+    let xLen = 11
+    let yLen = 11
     
     //players -- this means we have two boards we have to keep track of
     let player1 = 1
@@ -90,18 +90,26 @@ class BattleshipEngine {
     func placeShip(xLocation:Int, yLocation: Int, ship: Ship) {
         //place the ship's leftmost end at this location on the active player's board.
         var xLocation = xLocation
-        
+        var yLocation = yLocation
         if currentPlayer == 1 {
         
         
-        for i in 1...ship.width {
-            player1Board[yLocation][xLocation] = ship.name
-            xLocation += 1
-        }
+            if currentShipBeingPlaced.rotation == 0 {
+                for i in 1...ship.width {
+                    player1Board[yLocation][xLocation] = ship.name
+                    xLocation += 1
+                }
+            } else if currentShipBeingPlaced.rotation == 1 {
+                for i in 1...ship.width {
+                    player1Board[yLocation][xLocation] = ship.name
+                    yLocation+=1
+                }
+            }
+        
             
         }
         else {
-            for i in 0...ship.width {
+            for i in 1...ship.width {
                 player2Board[yLocation][xLocation] = ship.name
                 xLocation += 1
             }
