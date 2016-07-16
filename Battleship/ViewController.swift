@@ -289,6 +289,35 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
             if (currElementInArray < 5) {
                 currElementInArray += 1
                 if (currElementInArray == 5) {
+                    let digit = buttonArray[0].currentTitle!
+
+                    var xCoordinate = Int(digit.substringToIndex(digit.startIndex.advancedBy(1)))!
+                    var yCoordinate = Int(digit.substringFromIndex(digit.endIndex.advancedBy(-1)))!
+                    
+                    
+                    if (buttonArray[0].tag > 110) {
+                        // in the last row so the yCoordinate is just 10.
+                        xCoordinate = Int(digit.substringToIndex(digit.startIndex.advancedBy(1)))!
+                        yCoordinate = 10
+                        
+                    } else if (buttonArray[0].tag % 11 == 0) {
+                        xCoordinate = 10
+                        yCoordinate = Int(digit.substringFromIndex(digit.endIndex.advancedBy(-1)))!
+                    }else {
+                        
+                        xCoordinate = Int(digit.substringToIndex(digit.startIndex.advancedBy(1)))!
+                        yCoordinate = Int(digit.substringFromIndex(digit.endIndex.advancedBy(-1)))!
+                        
+                    }
+
+                    engine.placeShip(xCoordinate, yLocation: yCoordinate, ship: engine.currentShipBeingPlaced)
+                    
+                    
+                    engine.printPlayer1Board()
+                    
+                    //wipe buttonArray on confirm.
+                    buttonArray.removeAll()
+
                     //Change the UI, it's time to start!
                     shipDescription.hidden = true
                     imageOfShip.hidden = true
@@ -402,7 +431,8 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
         
     }
     
-    let pickerData = ["-5", "-4", "-3", "-2", "-1", "0", "1", "2", "3", "4", "5"]
+    let pickerData = ["5", "4", "3", "2", "1", "0", "-1", "-2", "-3", "-4", "-5"]
+    
     
     override func viewDidLoad() {
         
@@ -498,7 +528,7 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
     
     func updateView() {
         //check to see if we've been hit anywhere or if the computer has
-        
+        engine.printPlayer1Board()
         //loop through our board, wherever there's an "H" put a fire, wherever there's an "M" put a circle
         let fireImage = UIImage(named: "fireCell.png")
         let smokeImageDark = UIImage(named: "smokeDarkWater.png")
@@ -537,7 +567,6 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
                 if(engine.player2Board[x][y] == "H") {
                     let theTag = 11*x + y + 200 //is this the correct calculation or flipped?
                     if let theButton = self.view.viewWithTag(theTag) as? UIButton {
-                        buttonArray.append(theButton)
                         theButton.setImage(fireImage, forState: .Normal)
                     }
                     

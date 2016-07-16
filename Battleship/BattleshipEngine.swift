@@ -27,8 +27,10 @@ class BattleshipEngine {
     
     //the game's current state:
     var currentGameState = "Setup"
-    
-    
+    var lastShotMissed = false
+    var computersLastShotX = 0
+    var computersLastShotY = 0
+    var lastShotHit = false
     //var player1Board = [[String]]()
     var player1Board = [[String]](count: 11, repeatedValue: [String](count: 11, repeatedValue: "W"))
     //arr[0][1] = 1
@@ -244,16 +246,56 @@ class BattleshipEngine {
     func computerFires() {
         //fire at a random location not fired at before... make smarter later (fires next to previous targets!)
         var shotTaken = false
+        
         while !shotTaken{
-            let xNumber = Int(arc4random_uniform(11))
-            let yNumber = Int(arc4random_uniform(11))
+            var xNumber = Int(arc4random_uniform(11))
+            var yNumber = Int(arc4random_uniform(11))
             
-            if player1Board[yNumber][xNumber] == "M" || player1Board[yNumber][xNumber] == "H" {
-                
+//            if (lastShotHit) {
+//                
+//                if (computersLastShotX - 1 > 0) {
+//                    xNumber -= 1
+//                } else {
+//                    xNumber += 1
+//                }
+//                yNumber = computersLastShotY
+//            }
+//            
+//            if (lastShotMissed) {
+//                if xNumber - 3 > 0 {
+//                    xNumber -= 3
+//                } else if xNumber + 3 < 11 {
+//                    xNumber += 3
+//                }
+//                
+//                if  yNumber - 3 > 0{
+//                    yNumber -= 3
+//                } else if yNumber + 3 < 11 {
+//                    yNumber += 3
+//                }
+//                
+//                //this is to ensure we don't get stuck shooting in the same spot on accident.
+//                lastShotMissed = false
+//            }
+            if player1Board[xNumber][yNumber] == "M" || player1Board[xNumber][yNumber] == "H" {
             } else {
+                computersLastShotX = yNumber
+                computersLastShotY = xNumber
+                
                 fireAtLocation(yNumber, yLocation: xNumber)
+                
                 shotTaken = true
                 currentPlayer = 1
+                if player1Board[yNumber][xNumber] != "H" {
+                    //computer missed last time... try shooting further away from this point!
+                    lastShotMissed = true
+                    lastShotHit = false
+                }
+                
+                if player1Board[yNumber][xNumber] == "H" {
+                    lastShotHit = true
+                }
+                
             }
         }
     }
