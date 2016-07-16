@@ -35,8 +35,9 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
     @IBOutlet weak var aimLabel: UILabel!
     @IBOutlet weak var imageOfShip: UIButton!
     @IBOutlet weak var shipDescription: UILabel!
-    
-    
+    @IBOutlet weak var confirmButton: UIButton!
+    @IBOutlet weak var rotateButton: UIButton!
+    @IBOutlet weak var shipToPlaceText: UILabel!
     
     @IBAction func rotateButton(sender: UIButton) {
         if !buttonArray.isEmpty {
@@ -61,7 +62,7 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
                 yCoordinate = Int(digit.substringFromIndex(digit.endIndex.advancedBy(-1)))!
                 
             }
-        
+            
             switch (currentRotation) {
             case 0:
                 //if this is legal...
@@ -84,8 +85,8 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
                         currentButtonTag += 11
                         if let button = self.view.viewWithTag(currentButtonTag) as? UIButton
                         {
-                                buttonArray.append(button)
-                                button.setImage(shipCell, forState: .Normal)
+                            buttonArray.append(button)
+                            button.setImage(shipCell, forState: .Normal)
                             
                             
                         }
@@ -264,52 +265,75 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
         if !(buttonArray.isEmpty) {
             if (currElementInArray < 5) {
                 currElementInArray += 1
-
-            
-            print("Registered confirm")
-            let digit = buttonArray[0].currentTitle!
-           
-            var xCoordinate = Int(digit.substringToIndex(digit.startIndex.advancedBy(1)))!
-            var yCoordinate = Int(digit.substringFromIndex(digit.endIndex.advancedBy(-1)))!
-            
-            
-            if (buttonArray[0].tag > 110) {
-                // in the last row so the yCoordinate is just 10.
-                xCoordinate = Int(digit.substringToIndex(digit.startIndex.advancedBy(1)))!
-                yCoordinate = 10
-                
-            } else if (buttonArray[0].tag % 11 == 0) {
-                xCoordinate = 10
-                yCoordinate = Int(digit.substringFromIndex(digit.endIndex.advancedBy(-1)))!
-            }else {
-                
-                xCoordinate = Int(digit.substringToIndex(digit.startIndex.advancedBy(1)))!
-                yCoordinate = Int(digit.substringFromIndex(digit.endIndex.advancedBy(-1)))!
-                
-            }
-
-            
-            engine.placeShip(xCoordinate, yLocation: yCoordinate, ship: engine.currentShipBeingPlaced)
-            
-            
-            engine.printPlayer1Board()
-            
-            //wipe buttonArray on confirm.
-            buttonArray.removeAll()
-            
-            
-            var textArray = ["Destroyer - 2 spaces", "Submarine - 3 spaces", "Cruiser - 3 spaces", "Battleship - 4 spaces", "Carrier - 5 spaces", "No more ships to place :("]
-            
-            //textArray = textArray.reverse()
-            
-            let shipPicture = UIImage(named: engine.currentShipBeingPlaced.name + ".png")
-            
-            shipDescription.text = textArray[currElementInArray]
-            
-            imageOfShip.setImage(shipPicture, forState: .Normal)
+                if (currElementInArray == 5) {
+                    //Change the UI, it's time to start!
+                    shipDescription.hidden = true
+                    imageOfShip.hidden = true
+                    shipToPlaceText.hidden = true
+                    confirmButton.hidden = true
+                    rotateButton.hidden = true
+                    aimLabel.hidden = false
+                    xCoordinateInput.hidden = false
+                    yCoordinateInput.hidden = false
+                    commaLabel.hidden = false
+                    leftParenthLabel.hidden = false
+                    rightParenthLabel.hidden = false
+                    
+                    
+                    //check this range
+                    for i in 1...120 {
+                        if let button = self.view.viewWithTag(i) as? UIButton {
+                            button
+                            button.setImage(shipCell, forState: .Normal)
+                        }
+                    }
+                    
+                    engine.startGame()
+                } else {
+                    print("Registered confirm")
+                    let digit = buttonArray[0].currentTitle!
+                    
+                    var xCoordinate = Int(digit.substringToIndex(digit.startIndex.advancedBy(1)))!
+                    var yCoordinate = Int(digit.substringFromIndex(digit.endIndex.advancedBy(-1)))!
+                    
+                    
+                    if (buttonArray[0].tag > 110) {
+                        // in the last row so the yCoordinate is just 10.
+                        xCoordinate = Int(digit.substringToIndex(digit.startIndex.advancedBy(1)))!
+                        yCoordinate = 10
+                        
+                    } else if (buttonArray[0].tag % 11 == 0) {
+                        xCoordinate = 10
+                        yCoordinate = Int(digit.substringFromIndex(digit.endIndex.advancedBy(-1)))!
+                    }else {
+                        
+                        xCoordinate = Int(digit.substringToIndex(digit.startIndex.advancedBy(1)))!
+                        yCoordinate = Int(digit.substringFromIndex(digit.endIndex.advancedBy(-1)))!
+                        
+                    }
+                    
+                    
+                    engine.placeShip(xCoordinate, yLocation: yCoordinate, ship: engine.currentShipBeingPlaced)
+                    
+                    
+                    engine.printPlayer1Board()
+                    
+                    //wipe buttonArray on confirm.
+                    buttonArray.removeAll()
+                    
+                    
+                    var textArray = ["Destroyer - 2 spaces", "Submarine - 3 spaces", "Cruiser - 3 spaces", "Battleship - 4 spaces", "Carrier - 5 spaces", "No more ships to place :("]
+                    
+                    //textArray = textArray.reverse()
+                    
+                    let shipPicture = UIImage(named: engine.currentShipBeingPlaced.name + ".png")
+                    
+                    shipDescription.text = textArray[currElementInArray]
+                    
+                    imageOfShip.setImage(shipPicture, forState: .Normal)
+                }
             }
         }
-        
         //change the image of the ship and the description text
         
     }

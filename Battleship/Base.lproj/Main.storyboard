@@ -1072,10 +1072,13 @@
                     <connections>
                         <outlet property="aimLabel" destination="HEh-Aa-Y8I" id="Opg-a9-0Wy"/>
                         <outlet property="commaLabel" destination="Vhq-Sx-qvW" id="wmm-o9-U4f"/>
+                        <outlet property="confirmButton" destination="pPK-uM-s9J" id="voZ-8K-D4C"/>
                         <outlet property="imageOfShip" destination="Z5H-6y-cdg" id="rmi-2r-iib"/>
                         <outlet property="leftParenthLabel" destination="4Ck-E3-ipS" id="UTs-mI-OEh"/>
                         <outlet property="rightParenthLabel" destination="gVz-Bd-0ge" id="P0A-Ly-mwO"/>
+                        <outlet property="rotateButton" destination="x0k-QP-npS" id="1DL-6k-OiD"/>
                         <outlet property="shipDescription" destination="hdE-NH-wKz" id="Evp-e6-TT4"/>
+                        <outlet property="shipToPlaceText" destination="rIz-xR-pRb" id="V04-zz-mXz"/>
                         <outlet property="xCoordinateInput" destination="Zwb-M4-TcX" id="4sf-0e-IWK"/>
                         <outlet property="yCoordinateInput" destination="tlA-fj-Zn9" id="du8-dH-kup"/>
                     </connections>
