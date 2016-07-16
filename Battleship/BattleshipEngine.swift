@@ -68,9 +68,10 @@ class BattleshipEngine {
     func startGame() {
         // create the computer's board
         print("Starting Game!")
-
+        
         //createComputerBoard()
         
+        currentPlayer = 1
         
     }
     func createComputerBoard() {
@@ -140,7 +141,7 @@ class BattleshipEngine {
         print("Please place your first ship")
         createComputerBoard()
         currentPlayer = 1
-        }
+    }
     
     
     
@@ -207,11 +208,54 @@ class BattleshipEngine {
     
     func fireAtLocation(xLocation: Int, yLocation: Int) {
         //shoot at enemy
+        
         if currentPlayer == 1 {
             //place an X on opponent's board if it's a ship (and tell use we hit). Otherwise place an O
+            if player2Board[yLocation][xLocation] != "W" &&
+                player2Board[yLocation][xLocation] != "M" &&
+                player2Board[yLocation][xLocation] != "H" {
+                //we hit a ship!
+                player2Board[yLocation][xLocation] = "H"
+            } else if player2Board[yLocation][xLocation] == "W"{
+                player2Board[yLocation][xLocation] = "M"
+            }
             
+            currentPlayer = 2
+        } else {
+            print("Computer firing!")
+            if player1Board[yLocation][xLocation] != "W" && player1Board[yLocation][xLocation] != "M" &&
+                player1Board[yLocation][xLocation] != "H" {
+                
+                player1Board[yLocation][xLocation] = "H"
+            } else if player1Board[yLocation][xLocation] == "W"{
+                player1Board[yLocation][xLocation] = "M"
+                
+            }
+            currentPlayer = 1
         }
         
+        //computerFires()
+        //printPlayer1Board()
+        
+        //changeCurrentPlayer()
+        
+    }
+    
+    func computerFires() {
+        //fire at a random location not fired at before... make smarter later (fires next to previous targets!)
+        var shotTaken = false
+        while !shotTaken{
+            let xNumber = Int(arc4random_uniform(11))
+            let yNumber = Int(arc4random_uniform(11))
+            
+            if player1Board[yNumber][xNumber] == "M" || player1Board[yNumber][xNumber] == "H" {
+                
+            } else {
+                fireAtLocation(yNumber, yLocation: xNumber)
+                shotTaken = true
+                currentPlayer = 1
+            }
+        }
     }
     
     func changeCurrentPlayer() {

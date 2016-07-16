@@ -27,6 +27,7 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
     //create an array of buttons so we can keep track of which ones have been colored grey
     var buttonArray = [UIButton]()
     
+    @IBOutlet weak var theFireButton: UIButton!
     @IBOutlet weak var xCoordinateInput: UITextField!
     @IBOutlet weak var yCoordinateInput: UITextField!
     @IBOutlet weak var commaLabel: UILabel!
@@ -39,29 +40,51 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
     @IBOutlet weak var rotateButton: UIButton!
     @IBOutlet weak var shipToPlaceText: UILabel!
     
+    @IBAction func fireButton(sender: UIButton) {
+        print(xCoordinateInput.text)
+        print(yCoordinateInput.text)
+        if var xCoord = Int(yCoordinateInput.text!) {
+            if var yCoord = Int(xCoordinateInput.text!) {
+                
+                yCoord += 5
+                xCoord = 5-xCoord
+//                yCoord = 5-yCoord
+//                xCoord += 5
+                
+                print("Firing at: \(xCoord), \(yCoord)")
+                engine.fireAtLocation(yCoord, yLocation: xCoord)
+                
+                
+                engine.computerFires()
+                updateView()
+            }
+        }
+        
+    }
+    
+    
     @IBAction func rotateButton(sender: UIButton) {
         if !buttonArray.isEmpty {
-            var currentRotation = engine.currentShipBeingPlaced.rotation
+            let currentRotation = engine.currentShipBeingPlaced.rotation
             var currentButtonTag = buttonArray[0].tag
             let firstButton = buttonArray[0]
-            let digit = buttonArray[0].currentTitle!
-            var xCoordinate = 0
-            var yCoordinate = 0
-            
-            if (sender.tag > 110) {
-                // in the last row so the yCoordinate is just 10.
-                xCoordinate = Int(digit.substringToIndex(digit.startIndex.advancedBy(1)))!
-                yCoordinate = 10
-                
-            } else if (sender.tag % 11 == 0) {
-                xCoordinate = 10
-                yCoordinate = Int(digit.substringFromIndex(digit.endIndex.advancedBy(-1)))!
-            }else {
-                
-                xCoordinate = Int(digit.substringToIndex(digit.startIndex.advancedBy(1)))!
-                yCoordinate = Int(digit.substringFromIndex(digit.endIndex.advancedBy(-1)))!
-                
-            }
+//            var xCoordinate = 0
+//            var yCoordinate = 0
+//            
+//            if (sender.tag > 110) {
+//                // in the last row so the yCoordinate is just 10.
+//                xCoordinate = Int(digit.substringToIndex(digit.startIndex.advancedBy(1)))!
+//                yCoordinate = 10
+//
+//            } else if (sender.tag % 11 == 0) {
+//                xCoordinate = 10
+//                yCoordinate = Int(digit.substringFromIndex(digit.endIndex.advancedBy(-1)))!
+//            }else {
+//                
+//                xCoordinate = Int(digit.substringToIndex(digit.startIndex.advancedBy(1)))!
+//                yCoordinate = Int(digit.substringFromIndex(digit.endIndex.advancedBy(-1)))!
+//                
+//            }
             
             switch (currentRotation) {
             case 0:
@@ -81,7 +104,7 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
                         theButton.setImage(shipCell, forState: .Normal)
                     }
                     
-                    for i in 1...engine.currentShipBeingPlaced.width-1 {
+                    for _ in 1...engine.currentShipBeingPlaced.width-1 {
                         currentButtonTag += 11
                         if let button = self.view.viewWithTag(currentButtonTag) as? UIButton
                         {
@@ -112,7 +135,7 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
                         theButton.setImage(shipCell, forState: .Normal)
                     }
                     
-                    for i in 1...engine.currentShipBeingPlaced.width-1 {
+                    for _ in 1...engine.currentShipBeingPlaced.width-1 {
                         currentButtonTag += 1
                         if let button = self.view.viewWithTag(currentButtonTag) as? UIButton
                         {
@@ -162,7 +185,7 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
             
         }
         
-        var currentButtonTag = sender.tag
+        let currentButtonTag = sender.tag
         var incrementedButtonTag = currentButtonTag
         
         //check if the ship is going off the map... this changes based on the rotation!
@@ -172,7 +195,7 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
             //is the cellButton in the last row? If so we need to grab the whole "y" coordinate (e.g "10" not just one digit)
             
             
-            for i in 1...engine.currentShipBeingPlaced.width-1 {
+            for _ in 1...engine.currentShipBeingPlaced.width-1 {
                 if (incrementedButtonTag % 11) == 0 {
                     print("Not a valid placement of the ship")
                     return false
@@ -186,7 +209,7 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
                 incrementedXLocation = 0
             }
             
-            for i in 1...engine.currentShipBeingPlaced.width {
+            for _ in 1...engine.currentShipBeingPlaced.width {
                 //print(engine.currentShipBeingPlaced.name)
                 
                 if (engine.player1Board[yCoordinate][incrementedXLocation] != "W") {
@@ -213,7 +236,7 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
             
             var incrementedYLocation = yCoordinate
             
-            for i in 1...engine.currentShipBeingPlaced.width {
+            for _ in 1...engine.currentShipBeingPlaced.width {
                 if (engine.player1Board[incrementedYLocation][xCoordinate] != "W") {
                     print("Not a valid placement of the ship because of: " + engine.player1Board[incrementedYLocation][xCoordinate])
                     return false
@@ -278,13 +301,12 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
                     commaLabel.hidden = false
                     leftParenthLabel.hidden = false
                     rightParenthLabel.hidden = false
-                    
+                    theFireButton.hidden = false
                     
                     //check this range
-                    for i in 1...120 {
+                    for i in 1...121 {
                         if let button = self.view.viewWithTag(i) as? UIButton {
-                            button
-                            button.setImage(shipCell, forState: .Normal)
+                            button.userInteractionEnabled = false
                         }
                     }
                     
@@ -357,7 +379,7 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
             buttonArray.append(sender)
             
             if (engine.currentShipBeingPlaced.rotation == 0) {
-                for i in 1...engine.currentShipBeingPlaced.width {
+                for _ in 1...engine.currentShipBeingPlaced.width {
                     if let button = self.view.viewWithTag(currentButtonTag) as? UIButton {
                         buttonArray.append(button)
                         button.setImage(shipCell, forState: .Normal)
@@ -366,7 +388,7 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
                 }
                 
             } else if (engine.currentShipBeingPlaced.rotation == 1) {
-                for i in 1...engine.currentShipBeingPlaced.width {
+                for _ in 1...engine.currentShipBeingPlaced.width {
                     if let button = self.view.viewWithTag(currentButtonTag) as? UIButton {
                         buttonArray.append(button)
                         button.setImage(shipCell, forState: .Normal)
@@ -385,14 +407,14 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        
+        theFireButton.hidden = true
         setUpButtons()
         engine.setup()
         //TODO: Once the player is done placing all of their battleships, hide the "ship to place" label and UNHIDE all the aim based labels + fire button!
     }
     
     func setUpButtons() {
-        let picker: UIPickerView
+        var picker: UIPickerView
         picker = UIPickerView(frame: CGRectMake(0, 200, view.frame.width, 300))
         picker.backgroundColor = .whiteColor()
         
@@ -422,6 +444,8 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
         yCoordinateInput.inputAssistantItem.trailingBarButtonGroups = []
         yCoordinateInput.inputView = picker
         yCoordinateInput.inputAccessoryView = toolBar
+        
+        
         
         
     }
@@ -471,6 +495,76 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
         // Dispose of any resources that can be recreated.
     }
     
+    
+    func updateView() {
+        //check to see if we've been hit anywhere or if the computer has
+        
+        //loop through our board, wherever there's an "H" put a fire, wherever there's an "M" put a circle
+        let fireImage = UIImage(named: "fireCell.png")
+        let smokeImageDark = UIImage(named: "smokeDarkWater.png")
+        let smoke = UIImage(named: "smoke.png")
+        
+        for x in 0 ..< engine.player1Board.count {
+            for y in 0 ..< engine.player1Board[x].count {
+                
+                if(engine.player1Board[x][y] == "H") {
+                    let theTag = 11*x + y + 1 //is this the correct calculation or flipped?
+                    if let theButton = self.view.viewWithTag(theTag) as? UIButton {
+                        theButton.setImage(fireImage, forState: .Normal)
+                    }
+                    
+                }
+                
+                if (engine.player1Board[x][y] == "M") {
+                    let theTag = 11*x + y + 1
+                    if let buttons = self.view.viewWithTag(theTag) as? UIButton {
+                        
+                        if (buttons.tag == 6 || buttons.tag == 17 || buttons.tag == 28 || buttons.tag == 39 || buttons.tag == 50 || buttons.tag == 61 || buttons.tag == 72 || buttons.tag == 83 || buttons.tag == 94 || buttons.tag == 105 || buttons.tag == 116 || ((buttons.tag < 67) && (buttons.tag > 55)) ) {
+                            
+                            buttons.setImage(smoke, forState: .Normal)
+                            
+                        } else {
+                            buttons.setImage(smokeImageDark, forState: .Normal)
+                            
+                        }
+                    }
+                }
+            }
+        }
+        
+        for x in 0 ..< engine.player2Board.count {
+            for y in 0 ..< engine.player2Board[x].count {
+                if(engine.player2Board[x][y] == "H") {
+                    let theTag = 11*x + y + 200 //is this the correct calculation or flipped?
+                    if let theButton = self.view.viewWithTag(theTag) as? UIButton {
+                        buttonArray.append(theButton)
+                        theButton.setImage(fireImage, forState: .Normal)
+                    }
+                    
+                }
+                
+                if (engine.player2Board[x][y] == "M") {
+                    let theTag = 11*x + y + 200
+                    if let buttons = self.view.viewWithTag(theTag) as? UIButton {
+                        
+                        //TODO: FIX THESE ONES
+                        if (buttons.tag == 205 || buttons.tag == 216 || buttons.tag == 227 || buttons.tag == 238 || buttons.tag == 249 || buttons.tag == 260 || buttons.tag == 271 || buttons.tag == 282 || buttons.tag == 293 || buttons.tag == 304 || buttons.tag == 315 || ((buttons.tag < 266) && (buttons.tag > 254)) ) {
+                            
+                            buttons.setImage(smoke, forState: .Normal)
+                            
+                        } else {
+                            buttons.setImage(smokeImageDark, forState: .Normal)
+                            
+                        }
+                    }
+                }
+
+            }
+        }
+        
+        
+        
+    }
     
 }
 

@@ -17,6 +17,9 @@
 		247D619C1D1F636800598D29 /* BattleshipTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 247D619B1D1F636800598D29 /* BattleshipTests.swift */; };
 		247D61A71D1F636800598D29 /* BattleshipUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 247D61A61D1F636800598D29 /* BattleshipUITests.swift */; };
 		24A2F8CD1D20251F0048CF7D /* BattleshipEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24A2F8CC1D20251F0048CF7D /* BattleshipEngine.swift */; };
+		24B32AB31D39D6EA00F137EB /* fireCell.png in Resources */ = {isa = PBXBuildFile; fileRef = 24B32AB21D39D6EA00F137EB /* fireCell.png */; };
+		24B32AB61D39ED2F00F137EB /* smoke.png in Resources */ = {isa = PBXBuildFile; fileRef = 24B32AB41D39ED2F00F137EB /* smoke.png */; };
+		24B32AB71D39ED2F00F137EB /* smokeDarkWater.png in Resources */ = {isa = PBXBuildFile; fileRef = 24B32AB51D39ED2F00F137EB /* smokeDarkWater.png */; };
 		24D5E70E1D36F4800039C726 /* Battleship.png in Resources */ = {isa = PBXBuildFile; fileRef = 24D5E70A1D36F4800039C726 /* Battleship.png */; };
 		24D5E70F1D36F4800039C726 /* Carrier.png in Resources */ = {isa = PBXBuildFile; fileRef = 24D5E70B1D36F4800039C726 /* Carrier.png */; };
 		24D5E7101D36F4800039C726 /* Cruiser.png in Resources */ = {isa = PBXBuildFile; fileRef = 24D5E70C1D36F4800039C726 /* Cruiser.png */; };
@@ -61,6 +64,9 @@
 		247D61A61D1F636800598D29 /* BattleshipUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BattleshipUITests.swift; sourceTree = "<group>"; };
 		247D61A81D1F636800598D29 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		24A2F8CC1D20251F0048CF7D /* BattleshipEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BattleshipEngine.swift; sourceTree = "<group>"; };
+		24B32AB21D39D6EA00F137EB /* fireCell.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fireCell.png; sourceTree = SOURCE_ROOT; };
+		24B32AB41D39ED2F00F137EB /* smoke.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = smoke.png; sourceTree = SOURCE_ROOT; };
+		24B32AB51D39ED2F00F137EB /* smokeDarkWater.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = smokeDarkWater.png; sourceTree = SOURCE_ROOT; };
 		24D5E70A1D36F4800039C726 /* Battleship.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Battleship.png; sourceTree = SOURCE_ROOT; };
 		24D5E70B1D36F4800039C726 /* Carrier.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Carrier.png; sourceTree = SOURCE_ROOT; };
 		24D5E70C1D36F4800039C726 /* Cruiser.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Cruiser.png; sourceTree = SOURCE_ROOT; };
@@ -136,6 +142,9 @@
 				2461A7D71D36BA4A00DED48E /* Destroyer.png */,
 				24D5E7121D36FBBF0039C726 /* WaterCellAxis.png */,
 				24D5E7141D36FBEE0039C726 /* WaterCellAxis2.png */,
+				24B32AB21D39D6EA00F137EB /* fireCell.png */,
+				24B32AB41D39ED2F00F137EB /* smoke.png */,
+				24B32AB51D39ED2F00F137EB /* smokeDarkWater.png */,
 			);
 			path = Battleship;
 			sourceTree = "<group>";
@@ -269,12 +278,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				24D5E7131D36FBBF0039C726 /* WaterCellAxis.png in Resources */,
+				24B32AB31D39D6EA00F137EB /* fireCell.png in Resources */,
 				247D61911D1F636800598D29 /* LaunchScreen.storyboard in Resources */,
 				24D5E7111D36F4800039C726 /* Submarine.png in Resources */,
 				24D5E7151D36FBEE0039C726 /* WaterCellAxis2.png in Resources */,
 				24D5E70F1D36F4800039C726 /* Carrier.png in Resources */,
 				24D5E70E1D36F4800039C726 /* Battleship.png in Resources */,
+				24B32AB61D39ED2F00F137EB /* smoke.png in Resources */,
 				24E90A731D36B7AB001947D3 /* line.png in Resources */,
+				24B32AB71D39ED2F00F137EB /* smokeDarkWater.png in Resources */,
 				247D618E1D1F636800598D29 /* Assets.xcassets in Resources */,
 				24D5E7101D36F4800039C726 /* Cruiser.png in Resources */,
 				247D618C1D1F636800598D29 /* Main.storyboard in Resources */,
@@ -458,6 +470,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.soysauce44.Battleship;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Debug;
 		};
@@ -472,6 +485,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.soysauce44.Battleship;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Release;
 		};
