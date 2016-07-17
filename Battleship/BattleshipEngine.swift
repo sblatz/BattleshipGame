@@ -8,6 +8,7 @@
 
 import Foundation
 
+
 class Ship {
     var width = 0
     var hitsTaken = 0
@@ -24,10 +25,8 @@ class Ship {
 
 class BattleshipEngine {
     
-    
-    //the game's current state:
-    var currentGameState = "Setup"
     var lastShotMissed = false
+    var hitCount = 0
     var computersLastShotX = 0
     var computersLastShotY = 0
     var lastShotHit = false
@@ -35,7 +34,8 @@ class BattleshipEngine {
     var player1Board = [[String]](count: 11, repeatedValue: [String](count: 11, repeatedValue: "W"))
     //arr[0][1] = 1
     var player2Board = [[String]](count: 11, repeatedValue: [String](count: 11, repeatedValue: "W"))
-    
+    var winningPlayer = -1
+    var gameIsOver = false
     
     
     //dimensions of the sea:
@@ -48,16 +48,7 @@ class BattleshipEngine {
     var currentPlayer = 1
     
     
-    var Destroyer = Ship(width: 2, rotation: 0, name: "Destroyer")
-    var Submarine = Ship(width: 3, rotation: 0, name: "Submarine")
-    var Cruiser = Ship(width: 3, rotation: 0, name: "Cruiser")
-    var Battleship = Ship(width: 4, rotation: 0, name: "Battleship")
-    var Carrier = Ship(width: 5, rotation: 0, name: "Carrier")
-    var Destroyer2 = Ship(width: 2, rotation: 0, name: "Destroyer")
-    var Submarine2 = Ship(width: 3, rotation: 0, name: "Submarine")
-    var Cruiser2 = Ship(width: 3, rotation: 0, name: "Cruiser")
-    var Battleship2 = Ship(width: 4, rotation: 0, name: "Battleship")
-    var Carrier2 = Ship(width: 5, rotation: 0, name: "Carrier")
+    
     
     var shipArray = [Ship]()
     var currentIndex = 0
@@ -67,15 +58,16 @@ class BattleshipEngine {
         return shipArray[currentIndex]
     }
     
-    func startGame() {
-        // create the computer's board
-        print("Starting Game!")
-        
-        //createComputerBoard()
-        
-        currentPlayer = 1
-        
-    }
+    //    func startGame() {
+    //        // create the computer's board
+    //        print("Starting Game!")
+    //
+    //        //createComputerBoard()
+    //
+    //        currentPlayer = 1
+    //
+    //    }
+    
     func createComputerBoard() {
         //place ships...albeit rather inefficiently
         currentPlayer = 2
@@ -126,9 +118,25 @@ class BattleshipEngine {
         printPlayer2Board()
     }
     
-    
     func setup() {
+        gameIsOver = false
+        shipArray.removeAll()
+        player2Board.removeAll()
+        player1Board.removeAll()
         currentPlayer = 2
+        currentIndex = 0
+        player1Board = [[String]](count: 11, repeatedValue: [String](count: 11, repeatedValue: "W"))
+        player2Board = [[String]](count: 11, repeatedValue: [String](count: 11, repeatedValue: "W"))
+        var Destroyer = Ship(width: 2, rotation: 0, name: "Destroyer")
+        var Submarine = Ship(width: 3, rotation: 0, name: "Submarine")
+        var Cruiser = Ship(width: 3, rotation: 0, name: "Cruiser")
+        var Battleship = Ship(width: 4, rotation: 0, name: "Battleship")
+        var Carrier = Ship(width: 5, rotation: 0, name: "Carrier")
+        var Destroyer2 = Ship(width: 2, rotation: 0, name: "Destroyer")
+        var Submarine2 = Ship(width: 3, rotation: 0, name: "Submarine")
+        var Cruiser2 = Ship(width: 3, rotation: 0, name: "Cruiser")
+        var Battleship2 = Ship(width: 4, rotation: 0, name: "Battleship")
+        var Carrier2 = Ship(width: 5, rotation: 0, name: "Carrier")
         shipArray.append(Destroyer)
         shipArray.append(Submarine)
         shipArray.append(Cruiser)
@@ -240,63 +248,103 @@ class BattleshipEngine {
         //printPlayer1Board()
         
         //changeCurrentPlayer()
-        
+        checkForWin()
     }
     
     func computerFires() {
         //fire at a random location not fired at before... make smarter later (fires next to previous targets!)
-        var shotTaken = false
         
-        while !shotTaken{
-            var xNumber = Int(arc4random_uniform(11))
-            var yNumber = Int(arc4random_uniform(11))
+        if !gameIsOver {
+            var shotTaken = false
             
-//            if (lastShotHit) {
-//                
-//                if (computersLastShotX - 1 > 0) {
-//                    xNumber -= 1
-//                } else {
-//                    xNumber += 1
-//                }
-//                yNumber = computersLastShotY
-//            }
-//            
-//            if (lastShotMissed) {
-//                if xNumber - 3 > 0 {
-//                    xNumber -= 3
-//                } else if xNumber + 3 < 11 {
-//                    xNumber += 3
-//                }
-//                
-//                if  yNumber - 3 > 0{
-//                    yNumber -= 3
-//                } else if yNumber + 3 < 11 {
-//                    yNumber += 3
-//                }
-//                
-//                //this is to ensure we don't get stuck shooting in the same spot on accident.
-//                lastShotMissed = false
-//            }
-            if player1Board[xNumber][yNumber] == "M" || player1Board[xNumber][yNumber] == "H" {
-            } else {
-                computersLastShotX = yNumber
-                computersLastShotY = xNumber
+            while !shotTaken{
+                var xNumber = Int(arc4random_uniform(11))
+                var yNumber = Int(arc4random_uniform(11))
                 
-                fireAtLocation(yNumber, yLocation: xNumber)
-                
-                shotTaken = true
-                currentPlayer = 1
-                if player1Board[yNumber][xNumber] != "H" {
-                    //computer missed last time... try shooting further away from this point!
-                    lastShotMissed = true
-                    lastShotHit = false
+                //            if (lastShotHit) {
+                //
+                //                if (computersLastShotX - 1 > 0) {
+                //                    xNumber -= 1
+                //                } else {
+                //                    xNumber += 1
+                //                }
+                //                yNumber = computersLastShotY
+                //            }
+                //
+                //            if (lastShotMissed) {
+                //                if xNumber - 3 > 0 {
+                //                    xNumber -= 3
+                //                } else if xNumber + 3 < 11 {
+                //                    xNumber += 3
+                //                }
+                //
+                //                if  yNumber - 3 > 0{
+                //                    yNumber -= 3
+                //                } else if yNumber + 3 < 11 {
+                //                    yNumber += 3
+                //                }
+                //
+                //                //this is to ensure we don't get stuck shooting in the same spot on accident.
+                //                lastShotMissed = false
+                //            }
+                if player1Board[xNumber][yNumber] == "M" || player1Board[xNumber][yNumber] == "H" {
+                } else {
+                    computersLastShotX = yNumber
+                    computersLastShotY = xNumber
+                    
+                    fireAtLocation(yNumber, yLocation: xNumber)
+                    
+                    shotTaken = true
+                    currentPlayer = 1
+                    if player1Board[yNumber][xNumber] != "H" {
+                        //computer missed last time... try shooting further away from this point!
+                        lastShotMissed = true
+                        lastShotHit = false
+                    }
+                    
+                    if player1Board[yNumber][xNumber] == "H" {
+                        lastShotHit = true
+                    }
+                    
                 }
-                
-                if player1Board[yNumber][xNumber] == "H" {
-                    lastShotHit = true
-                }
-                
             }
+        }
+    }
+    
+    func checkForWin() {
+        hitCount = 0
+        for x in 0 ..< player1Board.count {
+            for y in 0 ..< player1Board[x].count {
+                if(player1Board[x][y] != "H" && player1Board[x][y] != "M" && player1Board[x][y] != "W") {
+                    //there are still ships on my side... play on!
+                    hitCount += 1
+                } else {
+                    
+                }
+            }
+        }
+        
+        if hitCount == 0 {
+            print("Player 2 has won!")
+            winningPlayer = 2
+            gameIsOver = true
+        } else {
+            hitCount = 0
+        }
+        
+        
+        for x in 0 ..< player2Board.count {
+            for y in 0 ..< player2Board[x].count {
+                if (player2Board[x][y] != "H" && player2Board[x][y] != "M" && player2Board[x][y] != "W") {
+                    hitCount += 1
+                } else {
+                }
+            }
+        }
+        if hitCount == 0 {
+            print("Player 1 has won!")
+            winningPlayer = 1
+            gameIsOver = true
         }
     }
     

@@ -2040,6 +2040,20 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QpJ-rt-hWw">
+                                <rect key="frame" x="410" y="517" width="202" height="145"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                <state key="normal" title="New Game"/>
+                                <connections>
+                                    <action selector="newGamePressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="NMj-Va-V7S"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text=" " textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HRG-Jr-Jlf">
+                                <rect key="frame" x="20" y="488" width="986" height="50"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <variation key="default">
@@ -2054,8 +2068,10 @@
                         <outlet property="aimLabel" destination="HEh-Aa-Y8I" id="Opg-a9-0Wy"/>
                         <outlet property="commaLabel" destination="Vhq-Sx-qvW" id="wmm-o9-U4f"/>
                         <outlet property="confirmButton" destination="pPK-uM-s9J" id="voZ-8K-D4C"/>
+                        <outlet property="gameStatusLabel" destination="HRG-Jr-Jlf" id="LlX-Tp-6DG"/>
                         <outlet property="imageOfShip" destination="Z5H-6y-cdg" id="rmi-2r-iib"/>
                         <outlet property="leftParenthLabel" destination="4Ck-E3-ipS" id="UTs-mI-OEh"/>
+                        <outlet property="newGameButton" destination="QpJ-rt-hWw" id="Pa8-lz-WCg"/>
                         <outlet property="rightParenthLabel" destination="gVz-Bd-0ge" id="P0A-Ly-mwO"/>
                         <outlet property="rotateButton" destination="x0k-QP-npS" id="1DL-6k-OiD"/>
                         <outlet property="shipDescription" destination="hdE-NH-wKz" id="Evp-e6-TT4"/>

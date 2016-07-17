@@ -39,6 +39,60 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
     @IBOutlet weak var confirmButton: UIButton!
     @IBOutlet weak var rotateButton: UIButton!
     @IBOutlet weak var shipToPlaceText: UILabel!
+    @IBOutlet weak var newGameButton: UIButton!
+    @IBOutlet weak var gameStatusLabel: UILabel!
+    
+    @IBAction func newGamePressed(sender: UIButton) {
+        gameStatusLabel.text = " "
+        currElementInArray = 0
+        newGameButton.hidden = true
+        shipDescription.hidden = false
+        imageOfShip.hidden = false
+        shipToPlaceText.hidden = false
+        confirmButton.hidden = false
+        rotateButton.hidden = false
+        //reset the visual board:
+        
+        for i in 0...320 {
+            if let buttons = self.view.viewWithTag(i) as? UIButton {
+                if (buttons.tag == 205 || buttons.tag == 216 || buttons.tag == 227 || buttons.tag == 238 || buttons.tag == 249 || buttons.tag == 260 || buttons.tag == 271 || buttons.tag == 282 || buttons.tag == 293 || buttons.tag == 304 || buttons.tag == 315 || ((buttons.tag < 266) && (buttons.tag > 254)) ) {
+                    
+                    buttons.setImage(waterCellAxis, forState: .Normal)
+                } else if (buttons.tag == 6 || buttons.tag == 17 || buttons.tag == 28 || buttons.tag == 39 || buttons.tag == 50 || buttons.tag == 61 || buttons.tag == 72 || buttons.tag == 83 || buttons.tag == 94 || buttons.tag == 105 || buttons.tag == 116 || ((buttons.tag < 67) && (buttons.tag > 55)) ) {
+                    
+                    buttons.setImage(waterCellAxis, forState: .Normal)
+                }
+                else {
+                    buttons.setImage(waterCell, forState: .Normal)
+                }
+                
+                if buttons.tag < 200 {
+                    buttons.userInteractionEnabled = true
+                }
+                
+            }
+        }
+
+        engine.setup()
+        
+    }
+    
+    func delay(bySeconds seconds: Double, dispatchLevel: DispatchLevel = .Main, closure: () -> Void) {
+        let dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(seconds * Double(NSEC_PER_SEC)))
+        dispatch_after(dispatchTime, dispatchLevel.dispatchQueue, closure)
+    }
+    
+    enum DispatchLevel {
+        case Main, UserInteractive, UserInitiated, Utility, Background
+        var dispatchQueue: OS_dispatch_queue {
+            switch self {
+            case .Main:             return dispatch_get_main_queue()
+            case .UserInteractive:  return dispatch_get_global_queue(QOS_CLASS_USER_INTERACTIVE, 0)
+            case .UserInitiated:    return dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0)
+            case .Utility:          return dispatch_get_global_queue(QOS_CLASS_UTILITY, 0)
+            case .Background:       return dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0) }
+        }
+    }
     
     @IBAction func fireButton(sender: UIButton) {
         print(xCoordinateInput.text)
@@ -48,15 +102,37 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
                 
                 yCoord += 5
                 xCoord = 5-xCoord
-//                yCoord = 5-yCoord
-//                xCoord += 5
+                //                yCoord = 5-yCoord
+                //                xCoord += 5
                 
                 print("Firing at: \(xCoord), \(yCoord)")
+                engine.currentPlayer = 1
                 engine.fireAtLocation(yCoord, yLocation: xCoord)
+                self.updateView()
                 
                 
-                engine.computerFires()
-                updateView()
+                if engine.player2Board[xCoord][yCoord] == "M" {
+                    gameStatusLabel.text = "You missed."
+                } else {
+                    gameStatusLabel.text = "Nice shot!"
+                }
+                
+                
+                delay(bySeconds: 1.5, dispatchLevel: .Main) {
+                    self.gameStatusLabel.text = "Prepare for enemy fire!"
+                }
+                
+                delay(bySeconds: 3, dispatchLevel: .Main) {
+                    // delayed code that will run on background thread
+                    self.engine.currentPlayer = 2
+                    self.engine.computerFires()
+                    self.gameStatusLabel.text = " "
+                    self.updateView()
+                }
+                
+                
+                
+                
             }
         }
         
@@ -68,23 +144,6 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
             let currentRotation = engine.currentShipBeingPlaced.rotation
             var currentButtonTag = buttonArray[0].tag
             let firstButton = buttonArray[0]
-//            var xCoordinate = 0
-//            var yCoordinate = 0
-//            
-//            if (sender.tag > 110) {
-//                // in the last row so the yCoordinate is just 10.
-//                xCoordinate = Int(digit.substringToIndex(digit.startIndex.advancedBy(1)))!
-//                yCoordinate = 10
-//
-//            } else if (sender.tag % 11 == 0) {
-//                xCoordinate = 10
-//                yCoordinate = Int(digit.substringFromIndex(digit.endIndex.advancedBy(-1)))!
-//            }else {
-//                
-//                xCoordinate = Int(digit.substringToIndex(digit.startIndex.advancedBy(1)))!
-//                yCoordinate = Int(digit.substringFromIndex(digit.endIndex.advancedBy(-1)))!
-//                
-//            }
             
             switch (currentRotation) {
             case 0:
@@ -96,6 +155,7 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
                 engine.currentShipBeingPlaced.rotation = 1
                 
                 if (isValidPlacementOfShip(firstButton)){
+                    gameStatusLabel.text = " "
                     //in bounds... now does it hit another ship?
                     removeShipFromView()
                     buttonArray.removeAll()
@@ -125,6 +185,7 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
                 
                 engine.currentShipBeingPlaced.rotation = 0
                 if (isValidPlacementOfShip(firstButton)){
+                    gameStatusLabel.text = " "
                     currentButtonTag = firstButton.tag
                     print(firstButton.tag)
                     //in bounds... now does it hit another ship?
@@ -149,10 +210,8 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
                 } else {
                     engine.currentShipBeingPlaced.rotation = 1
                 }
-                
-                
             default:
-                print("Nope")
+                print("Rotation error")
             }
             
             
@@ -198,6 +257,7 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
             for _ in 1...engine.currentShipBeingPlaced.width-1 {
                 if (incrementedButtonTag % 11) == 0 {
                     print("Not a valid placement of the ship")
+                    gameStatusLabel.text = "Not a valid placement of this ship."
                     return false
                 }
                 incrementedButtonTag += 1
@@ -214,6 +274,7 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
                 
                 if (engine.player1Board[yCoordinate][incrementedXLocation] != "W") {
                     print("Not a valid placement of the ship because of: " + engine.player1Board[yCoordinate][incrementedXLocation])
+                    gameStatusLabel.text = "Not a valid placement of this ship."
                     return false
                 }
                 
@@ -228,6 +289,7 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
         case 1:
             for i in 1...engine.currentShipBeingPlaced.width {
                 if ((incrementedButtonTag > 110) && i != engine.currentShipBeingPlaced.width) {
+                    gameStatusLabel.text = "Not a valid placement of this ship."
                     print("Goes off bottom of the map")
                     return false
                 }
@@ -238,6 +300,7 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
             
             for _ in 1...engine.currentShipBeingPlaced.width {
                 if (engine.player1Board[incrementedYLocation][xCoordinate] != "W") {
+                    gameStatusLabel.text = "Not a valid placement of this ship."
                     print("Not a valid placement of the ship because of: " + engine.player1Board[incrementedYLocation][xCoordinate])
                     return false
                 }
@@ -290,7 +353,7 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
                 currElementInArray += 1
                 if (currElementInArray == 5) {
                     let digit = buttonArray[0].currentTitle!
-
+                    
                     var xCoordinate = Int(digit.substringToIndex(digit.startIndex.advancedBy(1)))!
                     var yCoordinate = Int(digit.substringFromIndex(digit.endIndex.advancedBy(-1)))!
                     
@@ -309,7 +372,7 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
                         yCoordinate = Int(digit.substringFromIndex(digit.endIndex.advancedBy(-1)))!
                         
                     }
-
+                    
                     engine.placeShip(xCoordinate, yLocation: yCoordinate, ship: engine.currentShipBeingPlaced)
                     
                     
@@ -317,7 +380,7 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
                     
                     //wipe buttonArray on confirm.
                     buttonArray.removeAll()
-
+                    
                     //Change the UI, it's time to start!
                     shipDescription.hidden = true
                     imageOfShip.hidden = true
@@ -338,8 +401,8 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
                             button.userInteractionEnabled = false
                         }
                     }
-                    
-                    engine.startGame()
+                    print("Starting game!")
+                    //engine.startGame()
                 } else {
                     print("Registered confirm")
                     let digit = buttonArray[0].currentTitle!
@@ -403,6 +466,7 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
         var currentButtonTag = sender.tag
         
         if (isValidPlacementOfShip(sender)) {
+            gameStatusLabel.text = " "
             removeShipFromView()
             sender.setImage(shipCell, forState: .Normal)
             buttonArray.append(sender)
@@ -438,6 +502,7 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
         
         super.viewDidLoad()
         theFireButton.hidden = true
+        newGameButton.hidden = true
         setUpButtons()
         engine.setup()
         //TODO: Once the player is done placing all of their battleships, hide the "ship to place" label and UNHIDE all the aim based labels + fire button!
@@ -587,11 +652,28 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
                         }
                     }
                 }
-
+                
             }
         }
         
         
+        //is the game over?
+        if engine.gameIsOver {
+            //remove the firing interface and replace with a button that allows the game to be started from the beginning
+            if engine.winningPlayer == 1 {
+                gameStatusLabel.text = "You won!"
+            } else {
+                gameStatusLabel.text = "The computer won!"
+            }
+            newGameButton.hidden = false
+            aimLabel.hidden = true
+            xCoordinateInput.hidden = true
+            yCoordinateInput.hidden = true
+            commaLabel.hidden = true
+            leftParenthLabel.hidden = true
+            rightParenthLabel.hidden = true
+            theFireButton.hidden = true
+        }
         
     }
     
