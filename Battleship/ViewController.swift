@@ -41,6 +41,7 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
     @IBOutlet weak var shipToPlaceText: UILabel!
     @IBOutlet weak var newGameButton: UIButton!
     @IBOutlet weak var gameStatusLabel: UILabel!
+    @IBOutlet weak var controlPanelImage: UIImageView!
     
     @IBAction func newGamePressed(sender: UIButton) {
         gameStatusLabel.text = " "
@@ -51,6 +52,7 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
         shipToPlaceText.hidden = false
         confirmButton.hidden = false
         rotateButton.hidden = false
+        controlPanelImage.hidden = true
         //reset the visual board:
         
         for i in 0...320 {
@@ -394,6 +396,7 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
                     leftParenthLabel.hidden = false
                     rightParenthLabel.hidden = false
                     theFireButton.hidden = false
+                    controlPanelImage.hidden = false
                     
                     //check this range
                     for i in 1...121 {
@@ -435,12 +438,12 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
                     //wipe buttonArray on confirm.
                     buttonArray.removeAll()
                     
-                    
-                    var textArray = ["Destroyer - 2 spaces", "Submarine - 3 spaces", "Cruiser - 3 spaces", "Battleship - 4 spaces", "Carrier - 5 spaces", "No more ships to place :("]
+                    var textArray = ["Carrier - 5 spaces", "Battleship - 4 spaces", "Cruiser - 3 spaces", "Submarine - 3 Spaces", "Destroyer - 2 spaces", "No more ships to place :("]
+                    //var textArray = ["Destroyer - 2 spaces", "Submarine - 3 spaces", "Cruiser - 3 spaces", "Battleship - 4 spaces", "Carrier - 5 spaces", "No more ships to place :("]
                     
                     //textArray = textArray.reverse()
                     
-                    let shipPicture = UIImage(named: engine.currentShipBeingPlaced.name + ".png")
+                    let shipPicture = UIImage(named: engine.currentShipBeingPlaced.name + "White.png")
                     
                     shipDescription.text = textArray[currElementInArray]
                     
@@ -501,6 +504,7 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
     override func viewDidLoad() {
         
         super.viewDidLoad()
+        controlPanelImage.hidden = true
         theFireButton.hidden = true
         newGameButton.hidden = true
         setUpButtons()

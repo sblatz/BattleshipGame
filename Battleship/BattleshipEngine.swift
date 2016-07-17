@@ -26,9 +26,10 @@ class Ship {
 class BattleshipEngine {
     
     var lastShotMissed = false
+    var countOfAttemptsToBeSmart = 0
     var hitCount = 0
-    var computersLastShotX = 0
-    var computersLastShotY = 0
+    var computersLastShotX = -1
+    var computersLastShotY = -1
     var lastShotHit = false
     //var player1Board = [[String]]()
     var player1Board = [[String]](count: 11, repeatedValue: [String](count: 11, repeatedValue: "W"))
@@ -127,26 +128,27 @@ class BattleshipEngine {
         currentIndex = 0
         player1Board = [[String]](count: 11, repeatedValue: [String](count: 11, repeatedValue: "W"))
         player2Board = [[String]](count: 11, repeatedValue: [String](count: 11, repeatedValue: "W"))
-        var Destroyer = Ship(width: 2, rotation: 0, name: "Destroyer")
-        var Submarine = Ship(width: 3, rotation: 0, name: "Submarine")
-        var Cruiser = Ship(width: 3, rotation: 0, name: "Cruiser")
-        var Battleship = Ship(width: 4, rotation: 0, name: "Battleship")
         var Carrier = Ship(width: 5, rotation: 0, name: "Carrier")
-        var Destroyer2 = Ship(width: 2, rotation: 0, name: "Destroyer")
-        var Submarine2 = Ship(width: 3, rotation: 0, name: "Submarine")
-        var Cruiser2 = Ship(width: 3, rotation: 0, name: "Cruiser")
-        var Battleship2 = Ship(width: 4, rotation: 0, name: "Battleship")
+        var Battleship = Ship(width: 4, rotation: 0, name: "Battleship")
+        var Cruiser = Ship(width: 3, rotation: 0, name: "Cruiser")
+        var Submarine = Ship(width: 3, rotation: 0, name: "Submarine")
+        var Destroyer = Ship(width: 2, rotation: 0, name: "Destroyer")
         var Carrier2 = Ship(width: 5, rotation: 0, name: "Carrier")
-        shipArray.append(Destroyer)
-        shipArray.append(Submarine)
-        shipArray.append(Cruiser)
-        shipArray.append(Battleship)
+        var Battleship2 = Ship(width: 4, rotation: 0, name: "Battleship")
+        var Cruiser2 = Ship(width: 3, rotation: 0, name: "Cruiser")
+        var Submarine2 = Ship(width: 3, rotation: 0, name: "Submarine")
+        var Destroyer2 = Ship(width: 2, rotation: 0, name: "Destroyer")
         shipArray.append(Carrier)
-        shipArray.append(Destroyer2)
-        shipArray.append(Submarine2)
-        shipArray.append(Cruiser2)
-        shipArray.append(Battleship2)
+        shipArray.append(Battleship)
+        shipArray.append(Cruiser)
+        shipArray.append(Submarine)
+        shipArray.append(Destroyer)
         shipArray.append(Carrier2)
+        shipArray.append(Battleship2)
+        shipArray.append(Cruiser2)
+        shipArray.append(Submarine2)
+        shipArray.append(Destroyer2)
+        
         //ask the player to place their first ship
         print("Please place your first ship")
         createComputerBoard()
@@ -257,36 +259,59 @@ class BattleshipEngine {
         if !gameIsOver {
             var shotTaken = false
             
+            
+            
+            
             while !shotTaken{
+                
+//                if (computersLastShotX == -1 || computersLastShotY == -1) {
+//                    computersLastShotY = Int(arc4random_uniform(11))
+//                    computersLastShotX = Int(arc4random_uniform(11))
+//                }
+//                
                 var xNumber = Int(arc4random_uniform(11))
                 var yNumber = Int(arc4random_uniform(11))
+//                
+//                var xNumber = 0
+//                var yNumber = 0
+//                
+//                
+//                //if we missed last time, shoot *far* away from there (i.e opposite quadrant)
+//                
+//                if lastShotHit == false {
+//                    if (computersLastShotY < 6 && computersLastShotX < 6) {
+//                        //second quad
+//                        yNumber = computersLastShotY+5
+//                        xNumber = computersLastShotX+5
+//                    } else if (computersLastShotY > 5 && computersLastShotX > 5){
+//                        //fourth quad
+//                        yNumber = computersLastShotY-5
+//                        xNumber = computersLastShotY-5
+//                    } else if (computersLastShotY < 6 && computersLastShotX > 5) {
+//                        //first quad
+//                        yNumber = computersLastShotY + 5
+//                        xNumber = computersLastShotX - 5
+//                    } else if (computersLastShotY > 6 && computersLastShotX < 5) {
+//                       //third quad
+//                        yNumber = computersLastShotY - 5
+//                        xNumber = computersLastShotX + 5
+//                    } else {
+//                        xNumber = Int(arc4random_uniform(11))
+//                        yNumber = Int(arc4random_uniform(11))
+//                    }
+//                    
+//                } else {
+//                    //if we hit, try to shoot around that spot... keep track of how many times we've tried to hit that ship!
+//                    
+//                    if (countOfAttemptsToBeSmart < 5) {
+//                        xNumber = Int(arc4random_uniform(11))
+//                        yNumber = Int(arc4random_uniform(11))
+//                    }
+//                    
+//                    countOfAttemptsToBeSmart += 1
+//                }
+//                
                 
-                //            if (lastShotHit) {
-                //
-                //                if (computersLastShotX - 1 > 0) {
-                //                    xNumber -= 1
-                //                } else {
-                //                    xNumber += 1
-                //                }
-                //                yNumber = computersLastShotY
-                //            }
-                //
-                //            if (lastShotMissed) {
-                //                if xNumber - 3 > 0 {
-                //                    xNumber -= 3
-                //                } else if xNumber + 3 < 11 {
-                //                    xNumber += 3
-                //                }
-                //
-                //                if  yNumber - 3 > 0{
-                //                    yNumber -= 3
-                //                } else if yNumber + 3 < 11 {
-                //                    yNumber += 3
-                //                }
-                //
-                //                //this is to ensure we don't get stuck shooting in the same spot on accident.
-                //                lastShotMissed = false
-                //            }
                 if player1Board[xNumber][yNumber] == "M" || player1Board[xNumber][yNumber] == "H" {
                 } else {
                     computersLastShotX = yNumber
