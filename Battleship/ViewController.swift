@@ -258,8 +258,8 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
             
             for _ in 1...engine.currentShipBeingPlaced.width-1 {
                 if (incrementedButtonTag % 11) == 0 {
-                    print("Not a valid placement of the ship")
-                    gameStatusLabel.text = "Not a valid placement of this ship."
+                    print("Not a valid placement.")
+                    gameStatusLabel.text = "Not a valid placement."
                     return false
                 }
                 incrementedButtonTag += 1
@@ -276,7 +276,7 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
                 
                 if (engine.player1Board[yCoordinate][incrementedXLocation] != "W") {
                     print("Not a valid placement of the ship because of: " + engine.player1Board[yCoordinate][incrementedXLocation])
-                    gameStatusLabel.text = "Not a valid placement of this ship."
+                    gameStatusLabel.text = "Not a valid placement."
                     return false
                 }
                 
@@ -291,7 +291,7 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
         case 1:
             for i in 1...engine.currentShipBeingPlaced.width {
                 if ((incrementedButtonTag > 110) && i != engine.currentShipBeingPlaced.width) {
-                    gameStatusLabel.text = "Not a valid placement of this ship."
+                    gameStatusLabel.text = "Not a valid placement."
                     print("Goes off bottom of the map")
                     return false
                 }
@@ -302,7 +302,7 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
             
             for _ in 1...engine.currentShipBeingPlaced.width {
                 if (engine.player1Board[incrementedYLocation][xCoordinate] != "W") {
-                    gameStatusLabel.text = "Not a valid placement of this ship."
+                    gameStatusLabel.text = "Not a valid placement."
                     print("Not a valid placement of the ship because of: " + engine.player1Board[incrementedYLocation][xCoordinate])
                     return false
                 }
@@ -597,7 +597,7 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
     
     func updateView() {
         //check to see if we've been hit anywhere or if the computer has
-        engine.printPlayer1Board()
+        //engine.printPlayer1Board()
         //loop through our board, wherever there's an "H" put a fire, wherever there's an "M" put a circle
         let fireImage = UIImage(named: "fireCell.png")
         let smokeImageDark = UIImage(named: "smokeDarkWater.png")

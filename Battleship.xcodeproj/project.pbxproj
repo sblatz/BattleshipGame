@@ -21,6 +21,8 @@
 		247D61911D1F636800598D29 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 247D618F1D1F636800598D29 /* LaunchScreen.storyboard */; };
 		247D619C1D1F636800598D29 /* BattleshipTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 247D619B1D1F636800598D29 /* BattleshipTests.swift */; };
 		247D61A71D1F636800598D29 /* BattleshipUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 247D61A61D1F636800598D29 /* BattleshipUITests.swift */; };
+		248EE9961D3D47D5008F4579 /* destroyerLeft.png in Resources */ = {isa = PBXBuildFile; fileRef = 248EE9941D3D47D5008F4579 /* destroyerLeft.png */; };
+		248EE9971D3D47D5008F4579 /* destroyerRight.png in Resources */ = {isa = PBXBuildFile; fileRef = 248EE9951D3D47D5008F4579 /* destroyerRight.png */; };
 		24A2F8CD1D20251F0048CF7D /* BattleshipEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24A2F8CC1D20251F0048CF7D /* BattleshipEngine.swift */; };
 		24A746061D3C24F10032230D /* controlPanel3.png in Resources */ = {isa = PBXBuildFile; fileRef = 24A746051D3C24F10032230D /* controlPanel3.png */; };
 		24A7460C1D3C26F90032230D /* BattleshipWhite.png in Resources */ = {isa = PBXBuildFile; fileRef = 24A746071D3C26F90032230D /* BattleshipWhite.png */; };
@@ -85,6 +87,8 @@
 		247D61A21D1F636800598D29 /* BattleshipUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BattleshipUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		247D61A61D1F636800598D29 /* BattleshipUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BattleshipUITests.swift; sourceTree = "<group>"; };
 		247D61A81D1F636800598D29 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		248EE9941D3D47D5008F4579 /* destroyerLeft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = destroyerLeft.png; sourceTree = SOURCE_ROOT; };
+		248EE9951D3D47D5008F4579 /* destroyerRight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = destroyerRight.png; sourceTree = SOURCE_ROOT; };
 		24A2F8CC1D20251F0048CF7D /* BattleshipEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BattleshipEngine.swift; sourceTree = "<group>"; };
 		24A746051D3C24F10032230D /* controlPanel3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = controlPanel3.png; sourceTree = SOURCE_ROOT; };
 		24A746071D3C26F90032230D /* BattleshipWhite.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BattleshipWhite.png; sourceTree = SOURCE_ROOT; };
@@ -191,6 +195,8 @@
 				245B6B111D3C1D3C0095D1A3 /* rocksHalfSubmerged.png */,
 				245B6B0F1D3C1B520095D1A3 /* rocksUnderWater.png */,
 				24DDDAFA1D3C175600CA6F05 /* controlPanel2.png */,
+				248EE9941D3D47D5008F4579 /* destroyerLeft.png */,
+				248EE9951D3D47D5008F4579 /* destroyerRight.png */,
 				24B32AB41D39ED2F00F137EB /* smoke.png */,
 				24DDDAF61D3C0AE000CA6F05 /* rocksAndSand.png */,
 				24DDDAF41D3C0A4700CA6F05 /* rocksAndSand.png */,
@@ -342,6 +348,8 @@
 				24A746101D3C26F90032230D /* SubmarineWhite.png in Resources */,
 				24DDDAF51D3C0A4700CA6F05 /* rocksAndSand.png in Resources */,
 				24D5E70F1D36F4800039C726 /* Carrier.png in Resources */,
+				248EE9961D3D47D5008F4579 /* destroyerLeft.png in Resources */,
+				248EE9971D3D47D5008F4579 /* destroyerRight.png in Resources */,
 				245B6B101D3C1B520095D1A3 /* rocksUnderWater.png in Resources */,
 				24D5E70E1D36F4800039C726 /* Battleship.png in Resources */,
 				245B6B141D3C1DCF0095D1A3 /* lol.png in Resources */,

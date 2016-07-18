@@ -25,12 +25,14 @@ class Ship {
 
 class BattleshipEngine {
     
-    var lastShotMissed = false
     var countOfAttemptsToBeSmart = 0
     var hitCount = 0
     var computersLastShotX = -1
     var computersLastShotY = -1
     var lastShotHit = false
+    var lastShipHitRotation = 0
+    var lastShipHit = " "
+    
     //var player1Board = [[String]]()
     var player1Board = [[String]](count: 11, repeatedValue: [String](count: 11, repeatedValue: "W"))
     //arr[0][1] = 1
@@ -68,6 +70,8 @@ class BattleshipEngine {
     //        currentPlayer = 1
     //
     //    }
+    
+    
     
     func createComputerBoard() {
         //place ships...albeit rather inefficiently
@@ -253,84 +257,119 @@ class BattleshipEngine {
         checkForWin()
     }
     
+    func getShipFromName(name: String) -> Ship {
+        
+        for theShip in shipArray {
+            if theShip.name == name {
+                return theShip
+            }
+        }
+        
+        print("Couldn't find the specified ship... defaulting to 0th element!")
+        return shipArray[0]
+    }
+    
     func computerFires() {
-        //fire at a random location not fired at before... make smarter later (fires next to previous targets!)
         
         if !gameIsOver {
             var shotTaken = false
             
-            
-            
-            
             while !shotTaken{
                 
-//                if (computersLastShotX == -1 || computersLastShotY == -1) {
-//                    computersLastShotY = Int(arc4random_uniform(11))
-//                    computersLastShotX = Int(arc4random_uniform(11))
-//                }
-//                
+                if (computersLastShotX == -1 || computersLastShotY == -1) {
+                    computersLastShotY = Int(arc4random_uniform(11))
+                    computersLastShotX = Int(arc4random_uniform(11))
+                }
+                
                 var xNumber = Int(arc4random_uniform(11))
                 var yNumber = Int(arc4random_uniform(11))
-//                
-//                var xNumber = 0
-//                var yNumber = 0
-//                
-//                
-//                //if we missed last time, shoot *far* away from there (i.e opposite quadrant)
-//                
-//                if lastShotHit == false {
-//                    if (computersLastShotY < 6 && computersLastShotX < 6) {
-//                        //second quad
-//                        yNumber = computersLastShotY+5
-//                        xNumber = computersLastShotX+5
-//                    } else if (computersLastShotY > 5 && computersLastShotX > 5){
-//                        //fourth quad
-//                        yNumber = computersLastShotY-5
-//                        xNumber = computersLastShotY-5
-//                    } else if (computersLastShotY < 6 && computersLastShotX > 5) {
-//                        //first quad
-//                        yNumber = computersLastShotY + 5
-//                        xNumber = computersLastShotX - 5
-//                    } else if (computersLastShotY > 6 && computersLastShotX < 5) {
-//                       //third quad
-//                        yNumber = computersLastShotY - 5
-//                        xNumber = computersLastShotX + 5
-//                    } else {
-//                        xNumber = Int(arc4random_uniform(11))
-//                        yNumber = Int(arc4random_uniform(11))
-//                    }
-//                    
-//                } else {
-//                    //if we hit, try to shoot around that spot... keep track of how many times we've tried to hit that ship!
-//                    
-//                    if (countOfAttemptsToBeSmart < 5) {
-//                        xNumber = Int(arc4random_uniform(11))
-//                        yNumber = Int(arc4random_uniform(11))
-//                    }
-//                    
-//                    countOfAttemptsToBeSmart += 1
-//                }
-//                
+                
+                
+                if lastShotHit == false {
+                    
+                    
+                } else {
+                    
+                    xNumber = -1
+                    yNumber = -1
+
+                    
+                    print("Time to cheat")
+                    
+                    if (lastShipHitRotation == 1) {
+                        
+                        if (computersLastShotY + 1 <= 10) {
+                            if player1Board[computersLastShotX][computersLastShotY+1] == lastShipHit{
+                                print("adding a y")
+                                xNumber = computersLastShotX
+                                yNumber = computersLastShotY+1
+                            }
+                        } else if (computersLastShotY - 1 >= 0) {
+                            if player1Board[computersLastShotX][computersLastShotY-1] == lastShipHit {
+                                print("subtracting a y")
+                                xNumber = computersLastShotX
+                                yNumber = computersLastShotY-1
+                            }
+                        }
+
+                    } else  if (lastShipHitRotation == 0){
+                        
+                        if (computersLastShotX + 1 <= 10) {
+                            if player1Board[computersLastShotX+1][computersLastShotY] == lastShipHit {
+                                print("adding an x")
+                                xNumber = computersLastShotX+1
+                                yNumber = computersLastShotY
+                            }
+                        } else if computersLastShotX - 1 >= 0 {
+                            if player1Board[computersLastShotX-1][computersLastShotY] == lastShipHit {
+                                print("subtracting an x")
+                                xNumber = computersLastShotX-1
+                                yNumber = computersLastShotY
+                            }
+                        }
+                        
+                        
+                    }
+                    
+                    if xNumber == -1 || yNumber == -1 {
+                        //just search the board for the ship and hit it. 
+                        for x in 0 ..< player1Board.count {
+                            for y in 0 ..< player1Board[x].count {
+                                if (player1Board[x][y] == lastShipHit) {
+                                    print(player1Board[x][y])
+                                    xNumber = x
+                                    yNumber = y
+                                }
+                            }
+                        }
+                    }
+                    
+                    if xNumber == -1 || yNumber == -1 {
+                        xNumber = Int(arc4random_uniform(11))
+                        yNumber = Int(arc4random_uniform(11))
+
+                    }
+                    
+                }
+                
                 
                 if player1Board[xNumber][yNumber] == "M" || player1Board[xNumber][yNumber] == "H" {
                 } else {
-                    computersLastShotX = yNumber
-                    computersLastShotY = xNumber
+                    computersLastShotX = xNumber
+                    computersLastShotY = yNumber
+                    
+                    if player1Board[xNumber][yNumber] != "M" && player1Board[xNumber][yNumber] != "W" {
+                        lastShipHit = player1Board[xNumber][yNumber]
+                        lastShipHitRotation = getShipFromName(lastShipHit).rotation
+                        print("Computer hit ship: " + lastShipHit)
+                        lastShotHit = true
+                    }
                     
                     fireAtLocation(yNumber, yLocation: xNumber)
                     
                     shotTaken = true
                     currentPlayer = 1
-                    if player1Board[yNumber][xNumber] != "H" {
-                        //computer missed last time... try shooting further away from this point!
-                        lastShotMissed = true
-                        lastShotHit = false
-                    }
-                    
-                    if player1Board[yNumber][xNumber] == "H" {
-                        lastShotHit = true
-                    }
-                    
+ 
                 }
             }
         }
