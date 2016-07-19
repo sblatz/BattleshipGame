@@ -46,6 +46,8 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
     @IBAction func newGamePressed(sender: UIButton) {
         gameStatusLabel.text = " "
         currElementInArray = 0
+
+
         newGameButton.hidden = true
         shipDescription.hidden = false
         imageOfShip.hidden = false
@@ -76,7 +78,9 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
         }
 
         engine.setup()
-        
+        let shipPicture = UIImage(named: engine.currentShipBeingPlaced.name + "White.png")
+        shipDescription.text = "Carrier - 5 spaces"
+        imageOfShip.setImage(shipPicture, forState: .Normal)
     }
     
     func delay(bySeconds seconds: Double, dispatchLevel: DispatchLevel = .Main, closure: () -> Void) {
@@ -671,6 +675,8 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
             }
             newGameButton.hidden = false
             aimLabel.hidden = true
+            xCoordinateInput.text = ""
+            yCoordinateInput.text = ""
             xCoordinateInput.hidden = true
             yCoordinateInput.hidden = true
             commaLabel.hidden = true

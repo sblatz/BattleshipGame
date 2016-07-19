@@ -15,6 +15,7 @@ class Ship {
     var rotation = 0
     var name = ""
     
+    
     init(width: Int,rotation: Int, name: String) {
         self.width = width
         self.rotation = rotation
@@ -24,6 +25,7 @@ class Ship {
 
 
 class BattleshipEngine {
+    var firstShotForTesting = true
     
     var countOfAttemptsToBeSmart = 0
     var hitCount = 0
@@ -32,6 +34,8 @@ class BattleshipEngine {
     var lastShotHit = false
     var lastShipHitRotation = 0
     var lastShipHit = " "
+    var trackingShip = false
+    var secondHit = false
     
     //var player1Board = [[String]]()
     var player1Board = [[String]](count: 11, repeatedValue: [String](count: 11, repeatedValue: "W"))
@@ -87,7 +91,7 @@ class BattleshipEngine {
             //check if it's a valid placement before placing it.
             var currentX = xNumber
             var currentY = yNumber
-            for i in 0...currentShipBeingPlaced.width {
+            for _ in 0...currentShipBeingPlaced.width {
                 if rotation == 0 {
                     if currentX > 10 {
                         validPlacement = false
@@ -132,26 +136,27 @@ class BattleshipEngine {
         currentIndex = 0
         player1Board = [[String]](count: 11, repeatedValue: [String](count: 11, repeatedValue: "W"))
         player2Board = [[String]](count: 11, repeatedValue: [String](count: 11, repeatedValue: "W"))
-        var Carrier = Ship(width: 5, rotation: 0, name: "Carrier")
-        var Battleship = Ship(width: 4, rotation: 0, name: "Battleship")
-        var Cruiser = Ship(width: 3, rotation: 0, name: "Cruiser")
-        var Submarine = Ship(width: 3, rotation: 0, name: "Submarine")
-        var Destroyer = Ship(width: 2, rotation: 0, name: "Destroyer")
-        var Carrier2 = Ship(width: 5, rotation: 0, name: "Carrier")
-        var Battleship2 = Ship(width: 4, rotation: 0, name: "Battleship")
-        var Cruiser2 = Ship(width: 3, rotation: 0, name: "Cruiser")
-        var Submarine2 = Ship(width: 3, rotation: 0, name: "Submarine")
-        var Destroyer2 = Ship(width: 2, rotation: 0, name: "Destroyer")
-        shipArray.append(Carrier)
-        shipArray.append(Battleship)
-        shipArray.append(Cruiser)
-        shipArray.append(Submarine)
-        shipArray.append(Destroyer)
+        let Carrier2 = Ship(width: 5, rotation: 0, name: "Carrier2")
+        let Battleship2 = Ship(width: 4, rotation: 0, name: "Battleship2")
+        let Cruiser2 = Ship(width: 3, rotation: 0, name: "Cruiser2")
+        let Submarine2 = Ship(width: 3, rotation: 0, name: "Submarine2")
+        let Destroyer2 = Ship(width: 2, rotation: 0, name: "Destroyer2")
+        let Carrier = Ship(width: 5, rotation: 0, name: "Carrier")
+        let Battleship = Ship(width: 4, rotation: 0, name: "Battleship")
+        let Cruiser = Ship(width: 3, rotation: 0, name: "Cruiser")
+        let Submarine = Ship(width: 3, rotation: 0, name: "Submarine")
+        let Destroyer = Ship(width: 2, rotation: 0, name: "Destroyer")
         shipArray.append(Carrier2)
         shipArray.append(Battleship2)
         shipArray.append(Cruiser2)
         shipArray.append(Submarine2)
         shipArray.append(Destroyer2)
+
+        shipArray.append(Carrier)
+        shipArray.append(Battleship)
+        shipArray.append(Cruiser)
+        shipArray.append(Submarine)
+        shipArray.append(Destroyer)
         
         //ask the player to place their first ship
         print("Please place your first ship")
@@ -169,12 +174,12 @@ class BattleshipEngine {
             
             
             if currentShipBeingPlaced.rotation == 0 {
-                for i in 1...ship.width {
+                for _ in 1...ship.width {
                     player1Board[yLocation][xLocation] = ship.name
                     xLocation += 1
                 }
             } else if currentShipBeingPlaced.rotation == 1 {
-                for i in 1...ship.width {
+                for _ in 1...ship.width {
                     player1Board[yLocation][xLocation] = ship.name
                     yLocation+=1
                 }
@@ -185,12 +190,12 @@ class BattleshipEngine {
         else {
             print("Placing ship: " + currentShipBeingPlaced.name)
             if currentShipBeingPlaced.rotation == 0 {
-                for i in 1...ship.width {
+                for _ in 1...ship.width {
                     player2Board[yLocation][xLocation] = ship.name
                     xLocation += 1
                 }
             } else if currentShipBeingPlaced.rotation == 1 {
-                for i in 1...ship.width {
+                for _ in 1...ship.width {
                     player2Board[yLocation][xLocation] = ship.name
                     yLocation+=1
                 }
@@ -272,7 +277,10 @@ class BattleshipEngine {
     func computerFires() {
         
         if !gameIsOver {
+            
             var shotTaken = false
+            var coinFlip = 0
+            
             
             while !shotTaken{
                 
@@ -285,91 +293,219 @@ class BattleshipEngine {
                 var yNumber = Int(arc4random_uniform(11))
                 
                 
-                if lastShotHit == false {
+                
+                if (firstShotForTesting == true) {
+                    for x in 0 ..< player1Board.count {
+                        for y in 0 ..< player1Board[x].count {
+                            if (player1Board[x][y] == "Carrier") {
+                                print(player1Board[x][y])
+                                xNumber = x
+                                yNumber = y - 2
+                                computersLastShotX = xNumber
+                                computersLastShotY = yNumber
+                            }
+                        }
+                        
+                        firstShotForTesting = false
+                    }
+                }
+                
+                coinFlip = Int(arc4random_uniform(2))
+                if lastShotHit == false && trackingShip == false {
                     
                     
                 } else {
+                    trackingShip = true
+                    
+                    //if it's the second shot that has HIT, then it should just continue in a straight line
                     
                     xNumber = -1
                     yNumber = -1
-
                     
-                    print("Time to cheat")
+                    print("Tracking a ship...")
                     
-                    if (lastShipHitRotation == 1) {
-                        
-                        if (computersLastShotY + 1 <= 10) {
-                            if player1Board[computersLastShotX][computersLastShotY+1] == lastShipHit{
-                                print("adding a y")
-                                xNumber = computersLastShotX
-                                yNumber = computersLastShotY+1
-                            }
-                        } else if (computersLastShotY - 1 >= 0) {
-                            if player1Board[computersLastShotX][computersLastShotY-1] == lastShipHit {
-                                print("subtracting a y")
-                                xNumber = computersLastShotX
-                                yNumber = computersLastShotY-1
-                            }
-                        }
-
-                    } else  if (lastShipHitRotation == 0){
-                        
-                        if (computersLastShotX + 1 <= 10) {
-                            if player1Board[computersLastShotX+1][computersLastShotY] == lastShipHit {
-                                print("adding an x")
-                                xNumber = computersLastShotX+1
-                                yNumber = computersLastShotY
-                            }
-                        } else if computersLastShotX - 1 >= 0 {
-                            if player1Board[computersLastShotX-1][computersLastShotY] == lastShipHit {
-                                print("subtracting an x")
-                                xNumber = computersLastShotX-1
-                                yNumber = computersLastShotY
-                            }
-                        }
-                        
-                        
-                    }
                     
-                    if xNumber == -1 || yNumber == -1 {
-                        //just search the board for the ship and hit it. 
-                        for x in 0 ..< player1Board.count {
-                            for y in 0 ..< player1Board[x].count {
-                                if (player1Board[x][y] == lastShipHit) {
-                                    print(player1Board[x][y])
-                                    xNumber = x
-                                    yNumber = y
+                    
+                    
+                    if (secondHit == true) {
+                        
+                        print("We know the orientation now: " + String(lastShipHitRotation))
+                        coinFlip = Int(arc4random_uniform(2))
+                        if lastShipHitRotation == 0 {
+                            if (coinFlip == 0) {
+                                if (computersLastShotY + 1 <= 10) {
+                                    print("adding a x")
+                                    xNumber = computersLastShotX
+                                    yNumber = computersLastShotY+1
+                                    
+                                }
+                            } else {
+                                if(computersLastShotY - 1 >= 0) {
+                                    print("subtracting a x")
+                                    xNumber = computersLastShotX
+                                    yNumber = computersLastShotY-1
+                                    
                                 }
                             }
+                            
+                        } else {
+                            if (coinFlip == 0) {
+                                if (computersLastShotX + 1 <= 10) {
+                                    print("adding a y")
+                                    xNumber = computersLastShotX+1
+                                    yNumber = computersLastShotY
+                                }
+                            } else {
+                                if computersLastShotX - 1 >= 0 {
+                                    print("subtracting a y")
+                                    xNumber = computersLastShotX-1
+                                    yNumber = computersLastShotY
+                                }
+                                
+                            }
+                        }
+                    } else {
+                        
+                        
+                        
+                        
+                        if (coinFlip == 0) {
+                            print("coinFlip 0")
+                            
+                            coinFlip = Int(arc4random_uniform(2))
+                            if (coinFlip == 0) {
+                                if (computersLastShotY + 1 <= 10) {
+                                    print("adding a y")
+                                    xNumber = computersLastShotX
+                                    yNumber = computersLastShotY+1
+                                    
+                                } else if(computersLastShotY - 1 >= 0) {
+                                    print("subtracting a y")
+                                    xNumber = computersLastShotX
+                                    yNumber = computersLastShotY-1
+                                    
+                                }
+                                
+                            } else {
+                                if(computersLastShotY - 1 >= 0) {
+                                    print("subtracting a y")
+                                    xNumber = computersLastShotX
+                                    yNumber = computersLastShotY-1
+                                    
+                                } else if (computersLastShotY + 1 <= 10) {
+                                    print("adding a y")
+                                    xNumber = computersLastShotX
+                                    yNumber = computersLastShotY+1
+                                    
+                                }
+                            }
+                            
+                        } else {
+                            coinFlip = Int(arc4random_uniform(2))
+                            
+                            print("coinFlip 1")
+                            
+                            if (coinFlip == 0) {
+                                if (computersLastShotX + 1 <= 10) {
+                                    print("adding a x")
+                                    xNumber = computersLastShotX+1
+                                    yNumber = computersLastShotY
+                                } else if computersLastShotX - 1 >= 0 {
+                                    print("subtracting a x")
+                                    xNumber = computersLastShotX-1
+                                    yNumber = computersLastShotY
+                                }
+                            } else {
+                                if computersLastShotX - 1 >= 0 {
+                                    print("subtracting a x")
+                                    xNumber = computersLastShotX-1
+                                    yNumber = computersLastShotY
+                                } else if (computersLastShotX + 1 <= 10) {
+                                    print("adding a x")
+                                    xNumber = computersLastShotX+1
+                                    yNumber = computersLastShotY
+                                }
+                                
+                            }
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
                         }
                     }
                     
+                    var shipStillAlive = false
+                    
+                    for x in 0 ..< player1Board.count {
+                        for y in 0 ..< player1Board[x].count {
+                            if player1Board[x][y] == lastShipHit {
+                                shipStillAlive = true
+                            }
+                        }
+                    }
+                    
+                    if ((secondHit && lastShotHit == false) || xNumber == -1 || yNumber == -1 || shipStillAlive == false) {
+                        trackingShip = false
+                        print("no longer tracking")
+                        secondHit = false
+                    }
+                                       
                     if xNumber == -1 || yNumber == -1 {
+                        secondHit = false
+                        trackingShip = false
                         xNumber = Int(arc4random_uniform(11))
                         yNumber = Int(arc4random_uniform(11))
 
                     }
+                    
                     
                 }
                 
                 
                 if player1Board[xNumber][yNumber] == "M" || player1Board[xNumber][yNumber] == "H" {
                 } else {
-                    computersLastShotX = xNumber
-                    computersLastShotY = yNumber
+                    
+                    if (trackingShip == true) {
+                        
+                    } else {
+                        
+                        //only change this if we're no longer tracking a ship && we miss
+                        
+                        computersLastShotX = xNumber
+                        computersLastShotY = yNumber
+                    }
                     
                     if player1Board[xNumber][yNumber] != "M" && player1Board[xNumber][yNumber] != "W" {
+                        
+                        if (trackingShip == true && player1Board[xNumber][yNumber] == lastShipHit) {
+                            //only a second hit if it's on the same ship we're already tracking!
+                            secondHit = true
+                        }
+                        
                         lastShipHit = player1Board[xNumber][yNumber]
                         lastShipHitRotation = getShipFromName(lastShipHit).rotation
                         print("Computer hit ship: " + lastShipHit)
                         lastShotHit = true
+                        computersLastShotX = xNumber
+                        computersLastShotY = yNumber
+                        trackingShip = true
+                    } else {
+                        if (trackingShip == false && secondHit == false) {
+                            //if we're tracking a ship, ignore a missed shot
+                            lastShotHit = false
+                        }
                     }
                     
                     fireAtLocation(yNumber, yLocation: xNumber)
                     
                     shotTaken = true
                     currentPlayer = 1
- 
+                    
                 }
             }
         }
