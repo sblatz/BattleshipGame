@@ -25,10 +25,11 @@ class Ship {
 
 
 class BattleshipEngine {
-    var firstShotForTesting = true
+    var firstShotForTesting = false
     
     var countOfAttemptsToBeSmart = 0
     var hitCount = 0
+    var previouslyTrackedShip = " "
     var computersLastShotX = -1
     var computersLastShotY = -1
     var lastShotHit = false
@@ -281,9 +282,9 @@ class BattleshipEngine {
             var shotTaken = false
             var coinFlip = 0
             
-            
+            var retryAttempt = 0
             while !shotTaken{
-                
+                retryAttempt += 1
                 if (computersLastShotX == -1 || computersLastShotY == -1) {
                     computersLastShotY = Int(arc4random_uniform(11))
                     computersLastShotX = Int(arc4random_uniform(11))
@@ -313,6 +314,21 @@ class BattleshipEngine {
                 coinFlip = Int(arc4random_uniform(2))
                 if lastShotHit == false && trackingShip == false {
                     
+                    coinFlip = Int(arc4random_uniform(10))
+                        //1 in 10 chance to fire back at a previouslyTrackedShip
+                    
+                    if (coinFlip == 0) {
+                        for x in 0 ..< player1Board.count {
+                            for y in 0 ..< player1Board[x].count {
+                                if player1Board[x][y] == previouslyTrackedShip {
+                                    print("Using my intuition to fire at a spot that may be a ship...")
+                                    xNumber = x
+                                    yNumber = y
+                                }
+                            }
+                        }
+
+                    }
                     
                 } else {
                     trackingShip = true
@@ -448,10 +464,27 @@ class BattleshipEngine {
                             }
                         }
                     }
+
                     
-                    if ((secondHit && lastShotHit == false) || xNumber == -1 || yNumber == -1 || shipStillAlive == false) {
+                    //are we surrounded by hits/misses? // have we failed to hit 20 times in a row...? odds are we're stuck. Stop tracking and go random
+                    
+                  
+                    
+                    
+                    //(secondHit && (player1Board[xNumber][yNumber] == "M" || player1Board[xNumber][yNumber] == "H")) ||
+                    
+                    if (xNumber == -1 || yNumber == -1 || shipStillAlive == false
+                        || (secondHit && lastShotHit == false) || retryAttempt > 30) {
+                        
+                        if (retryAttempt > 30) {
+                            print("I'm stuck... fixing self...")
+                        }
+                        
+                        if (shipStillAlive == true) {
+                            previouslyTrackedShip = lastShipHit
+                        }
                         trackingShip = false
-                        print("no longer tracking")
+                        print("No longer tracking")
                         secondHit = false
                     }
                                        
@@ -495,8 +528,7 @@ class BattleshipEngine {
                         computersLastShotY = yNumber
                         trackingShip = true
                     } else {
-                        if (trackingShip == false && secondHit == false) {
-                            //if we're tracking a ship, ignore a missed shot
+                        if (secondHit == true || trackingShip == false) {
                             lastShotHit = false
                         }
                     }
