@@ -13,7 +13,55 @@
 
 import UIKit
 
+extension UIImage {
+    public func imageRotatedByDegrees(degrees: CGFloat, flip: Bool) -> UIImage {
+        let radiansToDegrees: (CGFloat) -> CGFloat = {
+            return $0 * (180.0 / CGFloat(M_PI))
+        }
+        let degreesToRadians: (CGFloat) -> CGFloat = {
+            return $0 / 180.0 * CGFloat(M_PI)
+        }
+        
+        // calculate the size of the rotated view's containing box for our drawing space
+        let rotatedViewBox = UIView(frame: CGRect(origin: CGPointZero, size: size))
+        let t = CGAffineTransformMakeRotation(degreesToRadians(degrees));
+        rotatedViewBox.transform = t
+        let rotatedSize = rotatedViewBox.frame.size
+        
+        // Create the bitmap context
+        UIGraphicsBeginImageContext(rotatedSize)
+        let bitmap = UIGraphicsGetCurrentContext()
+        
+        // Move the origin to the middle of the image so we will rotate and scale around the center.
+        CGContextTranslateCTM(bitmap, rotatedSize.width / 2.0, rotatedSize.height / 2.0);
+        
+        //   // Rotate the image context
+        CGContextRotateCTM(bitmap, degreesToRadians(degrees));
+        
+        // Now, draw the rotated/scaled image into the context
+        var yFlip: CGFloat
+        
+        if(flip){
+            yFlip = CGFloat(-1.0)
+        } else {
+            yFlip = CGFloat(1.0)
+        }
+        
+        CGContextScaleCTM(bitmap, yFlip, -1.0)
+        CGContextDrawImage(bitmap, CGRectMake(-size.width / 2, -size.height / 2, size.width, size.height), CGImage)
+        
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return newImage
+    }
+}
+
+
 class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelegate {
+    
+
+    
     
     
     private var engine = BattleshipEngine()
@@ -475,12 +523,17 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
         if (isValidPlacementOfShip(sender)) {
             gameStatusLabel.text = " "
             removeShipFromView()
-            sender.setImage(shipCell, forState: .Normal)
-            buttonArray.append(sender)
+            
+            var shipCell = UIImage(named: engine.currentShipBeingPlaced.name + "Cell1"  + ".png")
+
+            
             
             if (engine.currentShipBeingPlaced.rotation == 0) {
-                for _ in 1...engine.currentShipBeingPlaced.width {
+                sender.setImage(shipCell, forState: .Normal)
+                buttonArray.append(sender)
+                for i in 1...engine.currentShipBeingPlaced.width {
                     if let button = self.view.viewWithTag(currentButtonTag) as? UIButton {
+                        shipCell = UIImage(named: engine.currentShipBeingPlaced.name + "Cell" + String(i + 1) + ".png")
                         buttonArray.append(button)
                         button.setImage(shipCell, forState: .Normal)
                     }
@@ -488,8 +541,13 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
                 }
                 
             } else if (engine.currentShipBeingPlaced.rotation == 1) {
-                for _ in 1...engine.currentShipBeingPlaced.width {
+                shipCell = shipCell?.imageRotatedByDegrees(90, flip: false)
+                sender.setImage(shipCell, forState: .Normal)
+                buttonArray.append(sender)
+                for i in 1...engine.currentShipBeingPlaced.width {
                     if let button = self.view.viewWithTag(currentButtonTag) as? UIButton {
+                        shipCell = UIImage(named: engine.currentShipBeingPlaced.name + "Cell" + String(i + 1) + ".png")
+                        shipCell = shipCell?.imageRotatedByDegrees(90, flip: false)
                         buttonArray.append(button)
                         button.setImage(shipCell, forState: .Normal)
                     }
@@ -508,9 +566,11 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
     override func viewDidLoad() {
         
         super.viewDidLoad()
+        
         controlPanelImage.hidden = true
         theFireButton.hidden = true
         newGameButton.hidden = true
+        
         setUpButtons()
         engine.setup()
         //TODO: Once the player is done placing all of their battleships, hide the "ship to place" label and UNHIDE all the aim based labels + fire button!

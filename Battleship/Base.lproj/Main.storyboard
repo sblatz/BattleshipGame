@@ -255,14 +255,14 @@
                             </button>
                             <button opaque="NO" tag="25" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u5l-Be-D2B">
                                 <rect key="frame" x="98" y="97" width="40" height="40"/>
-                                <state key="normal" title="2 2" image="WaterCell.png"/>
+                                <state key="normal" title="2 2" image="DestroyerCell1.png"/>
                                 <connections>
                                     <action selector="cellButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Sk8-ao-gtI"/>
                                 </connections>
                             </button>
                             <button opaque="NO" tag="26" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Rg-xf-N0A">
                                 <rect key="frame" x="137" y="97" width="40" height="40"/>
-                                <state key="normal" title="3 2" image="WaterCell.png"/>
+                                <state key="normal" title="3 2" image="DestroyerCell2.png"/>
                                 <connections>
                                     <action selector="cellButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="8ti-0f-nXE"/>
                                 </connections>
@@ -437,7 +437,7 @@
                             </button>
                             <button opaque="NO" tag="51" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pl6-Hl-7Gu">
                                 <rect key="frame" x="254" y="174" width="40" height="40"/>
-                                <state key="normal" title="6 4" image="WaterCell.png"/>
+                                <state key="normal" title="6 4" image="CarrierCell1.png"/>
                                 <connections>
                                     <action selector="cellButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="6R6-Tp-OQd"/>
                                 </connections>
@@ -640,21 +640,21 @@
                             </button>
                             <button opaque="NO" tag="80" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dUq-T3-zLG">
                                 <rect key="frame" x="98" y="291" width="40" height="40"/>
-                                <state key="normal" title="2 7" image="WaterCell.png"/>
+                                <state key="normal" title="2 7" image="SubmarineCell1.png"/>
                                 <connections>
                                     <action selector="cellButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Sn4-QY-GCF"/>
                                 </connections>
                             </button>
                             <button opaque="NO" tag="81" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zyw-CP-N3c">
                                 <rect key="frame" x="137" y="291" width="40" height="40"/>
-                                <state key="normal" title="3 7" image="WaterCell.png"/>
+                                <state key="normal" title="3 7" image="SubmarineCell2.png"/>
                                 <connections>
                                     <action selector="cellButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Nrp-lL-Mc7"/>
                                 </connections>
                             </button>
                             <button opaque="NO" tag="82" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q3v-qN-w4I">
                                 <rect key="frame" x="176" y="291" width="40" height="40"/>
-                                <state key="normal" title="4 7" image="WaterCell.png"/>
+                                <state key="normal" title="4 7" image="SubmarineCell3.png"/>
                                 <connections>
                                     <action selector="cellButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="5Ox-FO-YOg"/>
                                 </connections>
@@ -2108,7 +2108,13 @@
         </scene>
     </scenes>
     <resources>
+        <image name="CarrierCell1.png" width="50" height="50"/>
         <image name="CarrierWhite.png" width="734" height="167"/>
+        <image name="DestroyerCell1.png" width="50" height="50"/>
+        <image name="DestroyerCell2.png" width="50" height="50"/>
+        <image name="SubmarineCell1.png" width="50" height="50"/>
+        <image name="SubmarineCell2.png" width="50" height="50"/>
+        <image name="SubmarineCell3.png" width="50" height="50"/>
         <image name="WaterCell.png" width="50" height="50"/>
         <image name="WaterCellAxis2.png" width="50" height="50"/>
         <image name="controlPanel.png" width="2000" height="800"/>
