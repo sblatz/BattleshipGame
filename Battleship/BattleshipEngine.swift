@@ -314,7 +314,7 @@ class BattleshipEngine {
                 coinFlip = Int(arc4random_uniform(2))
                 if lastShotHit == false && trackingShip == false {
                     
-                    coinFlip = Int(arc4random_uniform(10))
+                    coinFlip = Int(arc4random_uniform(5))
                         //1 in 10 chance to fire back at a previouslyTrackedShip
                     
                     if (coinFlip == 0) {
