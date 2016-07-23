@@ -60,7 +60,7 @@ extension UIImage {
 
 class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelegate {
     
-
+    
     
     
     
@@ -91,11 +91,14 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
     @IBOutlet weak var gameStatusLabel: UILabel!
     @IBOutlet weak var controlPanelImage: UIImageView!
     
+    @IBOutlet weak var xLabel: UILabel!
+    @IBOutlet weak var yLabel: UILabel!
+    
     @IBAction func newGamePressed(sender: UIButton) {
         gameStatusLabel.text = " "
         currElementInArray = 0
-
-
+        
+        
         newGameButton.hidden = true
         shipDescription.hidden = false
         imageOfShip.hidden = false
@@ -103,6 +106,8 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
         confirmButton.hidden = false
         rotateButton.hidden = false
         controlPanelImage.hidden = true
+        xLabel.hidden = false
+        yLabel.hidden = false
         //reset the visual board:
         
         for i in 0...320 {
@@ -124,7 +129,7 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
                 
             }
         }
-
+        
         engine.setup()
         let shipPicture = UIImage(named: engine.currentShipBeingPlaced.name + "White.png")
         shipDescription.text = "Carrier - 5 spaces"
@@ -213,6 +218,10 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
                     //in bounds... now does it hit another ship?
                     removeShipFromView()
                     buttonArray.removeAll()
+                    
+                    cellButton(firstButton)
+
+                    /*
                     if let theButton = self.view.viewWithTag(currentButtonTag) as? UIButton {
                         buttonArray.append(theButton)
                         theButton.setImage(shipCell, forState: .Normal)
@@ -230,6 +239,7 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
                         
                         
                     }
+                    */
                 } else {
                     engine.currentShipBeingPlaced.rotation = 0
                 }
@@ -245,6 +255,9 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
                     //in bounds... now does it hit another ship?
                     removeShipFromView()
                     buttonArray.removeAll()
+                    
+                    cellButton(firstButton)
+                    /*
                     if let theButton = self.view.viewWithTag(currentButtonTag) as? UIButton {
                         buttonArray.append(theButton)
                         theButton.setImage(shipCell, forState: .Normal)
@@ -261,6 +274,8 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
                         
                         
                     }
+                     */
+                    
                 } else {
                     engine.currentShipBeingPlaced.rotation = 1
                 }
@@ -449,6 +464,8 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
                     rightParenthLabel.hidden = false
                     theFireButton.hidden = false
                     controlPanelImage.hidden = false
+                    xLabel.hidden = false
+                    yLabel.hidden = false
                     
                     //check this range
                     for i in 1...121 {
@@ -511,6 +528,18 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
     //TODO: Rotate Button!
     
     
+    func isInDarkWater(button: UIButton) -> Bool {
+        
+        let buttons = button
+        
+        if (buttons.tag == 6 || buttons.tag == 17 || buttons.tag == 28 || buttons.tag == 39 || buttons.tag == 50 || buttons.tag == 61 || buttons.tag == 72 || buttons.tag == 83 || buttons.tag == 94 || buttons.tag == 105 || buttons.tag == 116 || ((buttons.tag < 67) && (buttons.tag > 55)) ) {
+            return false
+            
+        }
+        
+        return true
+    }
+    
     
     @IBAction func cellButton(sender: UIButton) {
         //our coordinates are told to us as 0,0 (top left) up to 10,10 (bottom right)
@@ -523,17 +552,53 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
         if (isValidPlacementOfShip(sender)) {
             gameStatusLabel.text = " "
             removeShipFromView()
+            var shipCell = UIImage(named: "shipCellRoundDark.png")
             
-            var shipCell = UIImage(named: engine.currentShipBeingPlaced.name + "Cell1"  + ".png")
-
+            if (!isInDarkWater(sender)) {
+                print("In light water")
+                shipCell = UIImage(named: "shipCellRoundLight.png")
+            }
             
             
             if (engine.currentShipBeingPlaced.rotation == 0) {
                 sender.setImage(shipCell, forState: .Normal)
+                currentButtonTag += 1
                 buttonArray.append(sender)
-                for i in 1...engine.currentShipBeingPlaced.width {
+                for i in 1...engine.currentShipBeingPlaced.width-1 {
                     if let button = self.view.viewWithTag(currentButtonTag) as? UIButton {
-                        shipCell = UIImage(named: engine.currentShipBeingPlaced.name + "Cell" + String(i + 1) + ".png")
+                        if (i == engine.currentShipBeingPlaced.width-1) {
+                            //last part of the ship. POINT it!
+                            if (isInDarkWater(button)) {
+                                print(engine.currentShipBeingPlaced.name)
+                                if (engine.currentShipBeingPlaced.name == "Destroyer") {
+                                    shipCell = UIImage(named:"destroyerCell.png")
+                                } else if (engine.currentShipBeingPlaced.name == "Submarine") {
+                                    shipCell = UIImage(named:"shipCellRoundDark.png")
+                                    shipCell = shipCell?.imageRotatedByDegrees(0, flip: true)
+                                }
+                                    
+                                else {
+                                    shipCell = UIImage(named: "shipCellPointDark.png")
+                                    
+                                }
+                            }
+                                
+                            else {
+                                if (engine.currentShipBeingPlaced.name == "Destroyer") {
+                                    shipCell = UIImage(named:"destroyerCellLight.png")
+                                } else if (engine.currentShipBeingPlaced.name == "Submarine") {
+                                    shipCell = UIImage(named:"shipCellRoundLight.png")
+                                    shipCell = shipCell?.imageRotatedByDegrees(0, flip: true)
+                                }
+                                else {
+                                    shipCell = UIImage(named: "shipCellPointLight.png")
+                                    
+                                }
+                            }
+                        } else {
+                            shipCell = UIImage(named: "ShipCell.png")
+                        }
+                        
                         buttonArray.append(button)
                         button.setImage(shipCell, forState: .Normal)
                     }
@@ -544,14 +609,56 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
                 shipCell = shipCell?.imageRotatedByDegrees(90, flip: false)
                 sender.setImage(shipCell, forState: .Normal)
                 buttonArray.append(sender)
-                for i in 1...engine.currentShipBeingPlaced.width {
+                currentButtonTag  += 11
+                for i in 1...engine.currentShipBeingPlaced.width-1 {
                     if let button = self.view.viewWithTag(currentButtonTag) as? UIButton {
-                        shipCell = UIImage(named: engine.currentShipBeingPlaced.name + "Cell" + String(i + 1) + ".png")
-                        shipCell = shipCell?.imageRotatedByDegrees(90, flip: false)
+                        if (i == engine.currentShipBeingPlaced.width-1) {
+                            //last part of the ship. POINT it!
+                            if (isInDarkWater(button)) {
+                                print(engine.currentShipBeingPlaced.name)
+                                if (engine.currentShipBeingPlaced.name == "Destroyer") {
+                                    shipCell = UIImage(named:"destroyerCell.png")
+                                } else if (engine.currentShipBeingPlaced.name == "Submarine") {
+                                    shipCell = UIImage(named:"shipCellRoundDark.png")
+                                    shipCell = shipCell?.imageRotatedByDegrees(0, flip: true)
+                                }
+                                    
+                                else {
+                                    shipCell = UIImage(named: "shipCellPointDark.png")
+                                    
+                                }
+                            }
+                                
+                            else {
+                                if (engine.currentShipBeingPlaced.name == "Destroyer") {
+                                    shipCell = UIImage(named:"destroyerCellLight.png")
+                                } else if (engine.currentShipBeingPlaced.name == "Submarine") {
+                                    shipCell = UIImage(named:"shipCellRoundLight.png")
+                                    shipCell = shipCell?.imageRotatedByDegrees(0, flip: true)
+                                }
+                                else {
+                                    shipCell = UIImage(named: "shipCellPointLight.png")
+                                    
+                                }
+                            }
+                        } else {
+                            shipCell = UIImage(named: "ShipCell.png")
+                        }
+                        
+                        
+                        //                    if let button = self.view.viewWithTag(currentButtonTag) as? UIButton {
+                        //                        shipCell = UIImage(named: engine.currentShipBeingPlaced.name + "Cell" + String(i + 1) + ".png")
+                        //                        shipCell = shipCell?.imageRotatedByDegrees(90, flip: false)
+                        //
+                        //                    }
+                        
+                        
+                        
+                        currentButtonTag += 11
                         buttonArray.append(button)
+                        shipCell = shipCell?.imageRotatedByDegrees(90, flip: false)
                         button.setImage(shipCell, forState: .Normal)
                     }
-                    currentButtonTag += 11
                 }
             }
         }
@@ -570,6 +677,8 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
         controlPanelImage.hidden = true
         theFireButton.hidden = true
         newGameButton.hidden = true
+        xLabel.hidden = true
+        yLabel.hidden = true
         
         setUpButtons()
         engine.setup()
@@ -743,6 +852,8 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
             leftParenthLabel.hidden = true
             rightParenthLabel.hidden = true
             theFireButton.hidden = true
+            xLabel.hidden = true
+            yLabel.hidden = true
         }
         
     }
