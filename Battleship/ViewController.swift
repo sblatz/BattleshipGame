@@ -13,64 +13,60 @@
 
 import UIKit
 
-extension UIImage {
-    public func imageRotatedByDegrees(degrees: CGFloat, flip: Bool) -> UIImage {
-        let radiansToDegrees: (CGFloat) -> CGFloat = {
-            return $0 * (180.0 / CGFloat(M_PI))
-        }
-        let degreesToRadians: (CGFloat) -> CGFloat = {
-            return $0 / 180.0 * CGFloat(M_PI)
-        }
-        
-        // calculate the size of the rotated view's containing box for our drawing space
-        let rotatedViewBox = UIView(frame: CGRect(origin: CGPointZero, size: size))
-        let t = CGAffineTransformMakeRotation(degreesToRadians(degrees));
-        rotatedViewBox.transform = t
-        let rotatedSize = rotatedViewBox.frame.size
-        
-        // Create the bitmap context
-        UIGraphicsBeginImageContext(rotatedSize)
-        let bitmap = UIGraphicsGetCurrentContext()
-        
-        // Move the origin to the middle of the image so we will rotate and scale around the center.
-        CGContextTranslateCTM(bitmap, rotatedSize.width / 2.0, rotatedSize.height / 2.0);
-        
-        //   // Rotate the image context
-        CGContextRotateCTM(bitmap, degreesToRadians(degrees));
-        
-        // Now, draw the rotated/scaled image into the context
-        var yFlip: CGFloat
-        
-        if(flip){
-            yFlip = CGFloat(-1.0)
-        } else {
-            yFlip = CGFloat(1.0)
-        }
-        
-        CGContextScaleCTM(bitmap, yFlip, -1.0)
-        CGContextDrawImage(bitmap, CGRectMake(-size.width / 2, -size.height / 2, size.width, size.height), CGImage)
-        
-        let newImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        
-        return newImage
-    }
-}
+//extension UIImage {
+//    public func imageRotatedByDegrees(degrees: CGFloat, flip: Bool) -> UIImage {
+//        let radiansToDegrees: (CGFloat) -> CGFloat = {
+//            return $0 * (180.0 / CGFloat(M_PI))
+//        }
+//        let degreesToRadians: (CGFloat) -> CGFloat = {
+//            return $0 / 180.0 * CGFloat(M_PI)
+//        }
+//        
+//        // calculate the size of the rotated view's containing box for our drawing space
+//        let rotatedViewBox = UIView(frame: CGRect(origin: CGPointZero, size: size))
+//        let t = CGAffineTransformMakeRotation(degreesToRadians(degrees));
+//        rotatedViewBox.transform = t
+//        let rotatedSize = rotatedViewBox.frame.size
+//        
+//        // Create the bitmap context
+//        UIGraphicsBeginImageContext(rotatedSize)
+//        let bitmap = UIGraphicsGetCurrentContext()
+//        
+//        // Move the origin to the middle of the image so we will rotate and scale around the center.
+//        CGContextTranslateCTM(bitmap, rotatedSize.width / 2.0, rotatedSize.height / 2.0);
+//        
+//        //   // Rotate the image context
+//        CGContextRotateCTM(bitmap, degreesToRadians(degrees));
+//        
+//        // Now, draw the rotated/scaled image into the context
+//        var yFlip: CGFloat
+//        
+//        if(flip){
+//            yFlip = CGFloat(-1.0)
+//        } else {
+//            yFlip = CGFloat(1.0)
+//        }
+//        
+//        CGContextScaleCTM(bitmap, yFlip, -1.0)
+//        CGContextDrawImage(bitmap, CGRectMake(-size.width / 2, -size.height / 2, size.width, size.height), CGImage)
+//        
+//        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+//        UIGraphicsEndImageContext()
+//        
+//        return newImage
+//    }
+//}
 
 
 class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelegate {
     
-    
-    
-    
-    
     private var engine = BattleshipEngine()
-    
     
     let shipCell = UIImage(named: "ShipCell.png")
     let waterCell = UIImage(named: "WaterCell.png")
     let waterCellAxis = UIImage(named: "WaterCellAxis2.png")
-    
+    var imagesRotated = [UIImage]()
+    var buttonsRotated = [UIButton]()
     
     //create an array of buttons so we can keep track of which ones have been colored grey
     var buttonArray = [UIButton]()
@@ -106,8 +102,8 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
         confirmButton.hidden = false
         rotateButton.hidden = false
         controlPanelImage.hidden = true
-        xLabel.hidden = false
-        yLabel.hidden = false
+        xLabel.hidden = true
+        yLabel.hidden = true
         //reset the visual board:
         
         for i in 0...320 {
@@ -166,6 +162,7 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
                 
                 print("Firing at: \(xCoord), \(yCoord)")
                 engine.currentPlayer = 1
+                var shipHit = engine.player2Board[xCoord][yCoord]
                 engine.fireAtLocation(yCoord, yLocation: xCoord)
                 self.updateView()
                 
@@ -174,7 +171,25 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
                     gameStatusLabel.text = "You missed."
                 } else {
                     gameStatusLabel.text = "Nice shot!"
+                    
+                    var shipIsDead = true
+                    //was this the opponent's last cell of that ship? if so... you sunk their ship!
+                    for x in 0 ..< engine.player2Board.count {
+                        for y in 0 ..< engine.player2Board[x].count {
+                            if (engine.player2Board[x][y] == shipHit) {
+                                shipIsDead = false
+                                break
+                            }
+                        }
+                    }
+                    
+                    if shipIsDead {
+                        shipHit = (shipHit.componentsSeparatedByCharactersInSet(NSCharacterSet.decimalDigitCharacterSet()) as NSArray).componentsJoinedByString("")
+                        gameStatusLabel.text = "You sunk the " + shipHit
+                    }
                 }
+                
+                
                 
                 
                 delay(bySeconds: 1.5, dispatchLevel: .Main) {
@@ -220,26 +235,26 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
                     buttonArray.removeAll()
                     
                     cellButton(firstButton)
-
-                    /*
-                    if let theButton = self.view.viewWithTag(currentButtonTag) as? UIButton {
-                        buttonArray.append(theButton)
-                        theButton.setImage(shipCell, forState: .Normal)
-                    }
                     
-                    for _ in 1...engine.currentShipBeingPlaced.width-1 {
-                        currentButtonTag += 11
-                        if let button = self.view.viewWithTag(currentButtonTag) as? UIButton
-                        {
-                            buttonArray.append(button)
-                            button.setImage(shipCell, forState: .Normal)
-                            
-                            
-                        }
-                        
-                        
-                    }
-                    */
+                    /*
+                     if let theButton = self.view.viewWithTag(currentButtonTag) as? UIButton {
+                     buttonArray.append(theButton)
+                     theButton.setImage(shipCell, forState: .Normal)
+                     }
+                     
+                     for _ in 1...engine.currentShipBeingPlaced.width-1 {
+                     currentButtonTag += 11
+                     if let button = self.view.viewWithTag(currentButtonTag) as? UIButton
+                     {
+                     buttonArray.append(button)
+                     button.setImage(shipCell, forState: .Normal)
+                     
+                     
+                     }
+                     
+                     
+                     }
+                     */
                 } else {
                     engine.currentShipBeingPlaced.rotation = 0
                 }
@@ -258,22 +273,22 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
                     
                     cellButton(firstButton)
                     /*
-                    if let theButton = self.view.viewWithTag(currentButtonTag) as? UIButton {
-                        buttonArray.append(theButton)
-                        theButton.setImage(shipCell, forState: .Normal)
-                    }
-                    
-                    for _ in 1...engine.currentShipBeingPlaced.width-1 {
-                        currentButtonTag += 1
-                        if let button = self.view.viewWithTag(currentButtonTag) as? UIButton
-                        {
-                            buttonArray.append(button)
-                            button.setImage(shipCell, forState: .Normal)
-                            
-                        }
-                        
-                        
-                    }
+                     if let theButton = self.view.viewWithTag(currentButtonTag) as? UIButton {
+                     buttonArray.append(theButton)
+                     theButton.setImage(shipCell, forState: .Normal)
+                     }
+                     
+                     for _ in 1...engine.currentShipBeingPlaced.width-1 {
+                     currentButtonTag += 1
+                     if let button = self.view.viewWithTag(currentButtonTag) as? UIButton
+                     {
+                     buttonArray.append(button)
+                     button.setImage(shipCell, forState: .Normal)
+                     
+                     }
+                     
+                     
+                     }
                      */
                     
                 } else {
@@ -445,7 +460,7 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
                     engine.placeShip(xCoordinate, yLocation: yCoordinate, ship: engine.currentShipBeingPlaced)
                     
                     
-                    engine.printPlayer1Board()
+                    //engine.printPlayer1Board()
                     
                     //wipe buttonArray on confirm.
                     buttonArray.removeAll()
@@ -479,8 +494,10 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
                     print("Registered confirm")
                     let digit = buttonArray[0].currentTitle!
                     
+                    
                     var xCoordinate = Int(digit.substringToIndex(digit.startIndex.advancedBy(1)))!
                     var yCoordinate = Int(digit.substringFromIndex(digit.endIndex.advancedBy(-1)))!
+                    
                     
                     
                     if (buttonArray[0].tag > 110) {
@@ -502,7 +519,7 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
                     engine.placeShip(xCoordinate, yLocation: yCoordinate, ship: engine.currentShipBeingPlaced)
                     
                     
-                    engine.printPlayer1Board()
+                    //engine.printPlayer1Board()
                     
                     //wipe buttonArray on confirm.
                     buttonArray.removeAll()
@@ -552,13 +569,16 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
         if (isValidPlacementOfShip(sender)) {
             gameStatusLabel.text = " "
             removeShipFromView()
-            var shipCell = UIImage(named: "shipCellRoundDark.png")
+            var shipCell = UIImage(named: "roundDarkLeft.png")
             
             if (!isInDarkWater(sender)) {
-                print("In light water")
-                shipCell = UIImage(named: "shipCellRoundLight.png")
+                //print("In light water")
+                shipCell = UIImage(named: "roundLightLeft.png")
             }
             
+            if sender.currentImage == "destroyerCell.png" {
+                //("Is destroyer!")
+            }
             
             if (engine.currentShipBeingPlaced.rotation == 0) {
                 sender.setImage(shipCell, forState: .Normal)
@@ -569,12 +589,11 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
                         if (i == engine.currentShipBeingPlaced.width-1) {
                             //last part of the ship. POINT it!
                             if (isInDarkWater(button)) {
-                                print(engine.currentShipBeingPlaced.name)
+                                //print(engine.currentShipBeingPlaced.name)
                                 if (engine.currentShipBeingPlaced.name == "Destroyer") {
                                     shipCell = UIImage(named:"destroyerCell.png")
                                 } else if (engine.currentShipBeingPlaced.name == "Submarine") {
-                                    shipCell = UIImage(named:"shipCellRoundDark.png")
-                                    shipCell = shipCell?.imageRotatedByDegrees(0, flip: true)
+                                    shipCell = UIImage(named:"roundDarkRight.png")
                                 }
                                     
                                 else {
@@ -587,18 +606,29 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
                                 if (engine.currentShipBeingPlaced.name == "Destroyer") {
                                     shipCell = UIImage(named:"destroyerCellLight.png")
                                 } else if (engine.currentShipBeingPlaced.name == "Submarine") {
-                                    shipCell = UIImage(named:"shipCellRoundLight.png")
-                                    shipCell = shipCell?.imageRotatedByDegrees(0, flip: true)
+                                    shipCell = UIImage(named:"roundLightRight.png")
                                 }
                                 else {
                                     shipCell = UIImage(named: "shipCellPointLight.png")
-                                    
                                 }
                             }
                         } else {
                             shipCell = UIImage(named: "ShipCell.png")
                         }
                         
+                        
+                        //remove us from the rotated buttons list...
+                        //print(buttonsRotated.count)
+                        for i in 0...buttonsRotated.count {
+                            if (i < buttonsRotated.count)  {
+                                //print ("in here")
+                                let otherButton = buttonsRotated[i]
+                                if button.tag == otherButton.tag {
+                                    buttonsRotated.removeAtIndex(i)
+                                }
+                            }
+                            
+                        }
                         buttonArray.append(button)
                         button.setImage(shipCell, forState: .Normal)
                     }
@@ -606,7 +636,11 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
                 }
                 
             } else if (engine.currentShipBeingPlaced.rotation == 1) {
-                shipCell = shipCell?.imageRotatedByDegrees(90, flip: false)
+                if isInDarkWater(sender) {
+                    shipCell = UIImage(named: "roundDarkUp.png")
+                } else {
+                    shipCell = UIImage(named: "roundLightUp.png")
+                }
                 sender.setImage(shipCell, forState: .Normal)
                 buttonArray.append(sender)
                 currentButtonTag  += 11
@@ -617,27 +651,25 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
                             if (isInDarkWater(button)) {
                                 print(engine.currentShipBeingPlaced.name)
                                 if (engine.currentShipBeingPlaced.name == "Destroyer") {
-                                    shipCell = UIImage(named:"destroyerCell.png")
+                                    shipCell = UIImage(named:"destroyerDown.png")
                                 } else if (engine.currentShipBeingPlaced.name == "Submarine") {
-                                    shipCell = UIImage(named:"shipCellRoundDark.png")
-                                    shipCell = shipCell?.imageRotatedByDegrees(0, flip: true)
+                                    shipCell = UIImage(named:"roundDarkDown.png")
                                 }
                                     
                                 else {
-                                    shipCell = UIImage(named: "shipCellPointDark.png")
+                                    shipCell = UIImage(named: "shipCellPointDarkDown.png")
                                     
                                 }
                             }
                                 
                             else {
                                 if (engine.currentShipBeingPlaced.name == "Destroyer") {
-                                    shipCell = UIImage(named:"destroyerCellLight.png")
+                                    shipCell = UIImage(named:"destroyerCellLightDown.png")
                                 } else if (engine.currentShipBeingPlaced.name == "Submarine") {
-                                    shipCell = UIImage(named:"shipCellRoundLight.png")
-                                    shipCell = shipCell?.imageRotatedByDegrees(0, flip: true)
+                                    shipCell = UIImage(named:"roundLightDown.png")
                                 }
                                 else {
-                                    shipCell = UIImage(named: "shipCellPointLight.png")
+                                    shipCell = UIImage(named: "shipCellPointLightDown.png")
                                     
                                 }
                             }
@@ -646,17 +678,11 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
                         }
                         
                         
-                        //                    if let button = self.view.viewWithTag(currentButtonTag) as? UIButton {
-                        //                        shipCell = UIImage(named: engine.currentShipBeingPlaced.name + "Cell" + String(i + 1) + ".png")
-                        //                        shipCell = shipCell?.imageRotatedByDegrees(90, flip: false)
-                        //
-                        //                    }
-                        
-                        
-                        
                         currentButtonTag += 11
                         buttonArray.append(button)
-                        shipCell = shipCell?.imageRotatedByDegrees(90, flip: false)
+                        //append us to the list of buttons rotated...
+                        buttonsRotated.append(button)
+                        //print(shipCell)
                         button.setImage(shipCell, forState: .Normal)
                     }
                 }
@@ -772,16 +798,81 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
         //check to see if we've been hit anywhere or if the computer has
         //engine.printPlayer1Board()
         //loop through our board, wherever there's an "H" put a fire, wherever there's an "M" put a circle
-        let fireImage = UIImage(named: "fireCell.png")
+        
         let smokeImageDark = UIImage(named: "smokeDarkWater.png")
         let smoke = UIImage(named: "smoke.png")
-        
+        var fireImage = UIImage(named: "lol.png")
         for x in 0 ..< engine.player1Board.count {
             for y in 0 ..< engine.player1Board[x].count {
                 
                 if(engine.player1Board[x][y] == "H") {
                     let theTag = 11*x + y + 1 //is this the correct calculation or flipped?
                     if let theButton = self.view.viewWithTag(theTag) as? UIButton {
+                        fireImage = theButton.currentImage
+                        //does it need to be a rounded fire?
+                        
+                        //print(theTag)
+                        if theButton.currentImage!.isEqual(UIImage(named: "destroyerCell.png")) {
+                            fireImage = UIImage(named: "DestroyerFireDark.png")
+                        } else if theButton.currentImage!.isEqual(UIImage(named: "destroyerCellDown.png")) {
+                            fireImage = UIImage(named: "DestroyerFireDarkDown.png")
+                            
+                        } else if theButton.currentImage!.isEqual(UIImage(named: "destroyerCellLight.png")) {
+                            fireImage = UIImage(named: "destroyerCellFireLight.png")
+                            
+                        } else if theButton.currentImage!.isEqual(UIImage(named: "destroyerCellLightDown.png")) {
+                            fireImage = UIImage(named: "destroyerCellFireLightDown.png")
+                            
+                        } else if theButton.currentImage!.isEqual(UIImage(named: "roundDarkLeft.png")) {
+                            fireImage = UIImage(named: "fireRoundDark.png")
+                        } else if theButton.currentImage!.isEqual(UIImage(named: "roundDarkRight.png")) {
+                            fireImage = UIImage(named: "fireRoundDarkRight.png")
+                            
+                        }else if theButton.currentImage!.isEqual(UIImage(named: "roundDarkDown.png")) {
+                            fireImage = UIImage(named: "fireRoundDarkDown.png")
+                            
+                        }else if theButton.currentImage!.isEqual(UIImage(named: "roundDarkUp.png")) {
+                            fireImage = UIImage(named: "fireRoundDarkUp.png")
+                            
+                        }else if theButton.currentImage!.isEqual(UIImage(named: "roundLightLeft.png")) {
+                            fireImage = UIImage(named: "fireRoundLightLeft.png")
+                            
+                        }else if theButton.currentImage!.isEqual(UIImage(named: "roundLightRight.png")) {
+                            fireImage = UIImage(named: "fireRoundLightRight.png")
+                            
+                        }else if theButton.currentImage!.isEqual(UIImage(named: "roundLightDown.png")) {
+                            fireImage = UIImage(named: "fireRoundLightDown.png")
+                            
+                        }else if theButton.currentImage!.isEqual(UIImage(named: "roundLightUp.png")) {
+                            fireImage = UIImage(named: "fireRoundLightUp.png")
+                            
+                        }
+                        
+                        
+                        else if theButton.currentImage!.isEqual(UIImage(named: "shipCellPointDark.png")) {
+                            fireImage = UIImage(named: "firePointDark.png")
+
+                        } else if theButton.currentImage!.isEqual(UIImage(named: "shipCellPointDarkDown.png")) {
+                            fireImage = UIImage(named: "firePointDarkDown.png")
+                            
+                        }
+                        else if theButton.currentImage!.isEqual(UIImage(named: "shipCellPointLight.png")) {
+                            fireImage = UIImage(named: "firePointLight.png")
+                        }else if theButton.currentImage!.isEqual(UIImage(named: "shipCellPointLightDown.png")) {
+                            fireImage = UIImage(named: "firePointLightDown.png")
+                        }
+                        else if theButton.currentImage!.isEqual(UIImage(named: "ShipCell.png")) {
+                            fireImage = UIImage(named: "fireCell.png")
+                        }
+                        
+                        
+                
+                        
+                        
+                        //JUMP HERE
+                      
+                        
+                        //print("setting image!")
                         theButton.setImage(fireImage, forState: .Normal)
                     }
                     
@@ -809,6 +900,7 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
                 if(engine.player2Board[x][y] == "H") {
                     let theTag = 11*x + y + 200 //is this the correct calculation or flipped?
                     if let theButton = self.view.viewWithTag(theTag) as? UIButton {
+                        fireImage = UIImage(named: "fireCell.png")
                         theButton.setImage(fireImage, forState: .Normal)
                     }
                     
