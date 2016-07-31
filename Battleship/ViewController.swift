@@ -814,14 +814,14 @@ class ViewController: UIViewController,UIPickerViewDataSource,UIPickerViewDelega
                         //print(theTag)
                         if theButton.currentImage!.isEqual(UIImage(named: "destroyerCell.png")) {
                             fireImage = UIImage(named: "DestroyerFireDark.png")
-                        } else if theButton.currentImage!.isEqual(UIImage(named: "destroyerCellDown.png")) {
+                        } else if theButton.currentImage!.isEqual(UIImage(named: "destroyerDown.png")) {
                             fireImage = UIImage(named: "DestroyerFireDarkDown.png")
                             
                         } else if theButton.currentImage!.isEqual(UIImage(named: "destroyerCellLight.png")) {
                             fireImage = UIImage(named: "destroyerCellFireLight.png")
                             
                         } else if theButton.currentImage!.isEqual(UIImage(named: "destroyerCellLightDown.png")) {
-                            fireImage = UIImage(named: "destroyerCellFireLightDown.png")
+                            fireImage = UIImage(named: "DestroyerFireLightDown.png")
                             
                         } else if theButton.currentImage!.isEqual(UIImage(named: "roundDarkLeft.png")) {
                             fireImage = UIImage(named: "fireRoundDark.png")

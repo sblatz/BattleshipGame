@@ -402,7 +402,7 @@
 				TargetAttributes = {
 					247D61821D1F636800598D29 = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = UVW66KW5WC;
+						DevelopmentTeam = AJ5U32CNZB;
 					};
 					247D61961D1F636800598D29 = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -683,7 +683,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Battleship/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.soysauce44.BattleshipGame;
+				PRODUCT_BUNDLE_IDENTIFIER = com.soysauce44.BattleshipGames;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 2;
@@ -698,7 +698,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Battleship/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.soysauce44.BattleshipGame;
+				PRODUCT_BUNDLE_IDENTIFIER = com.soysauce44.BattleshipGames;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 2;
